@@ -4,6 +4,11 @@ Para desenvolver as atividades da disciplina de Computação Gráfica favor util
 
 Alunos:  
 
+    João Vitor Persuhn  
+    Matheus Petters Bevilaqua  
+    Natália Sens Weise  
+    Paulo Rubens de Moraes Leme Junior  
+
 ## [Atividades da Unidade 1](Unidade1/ "Atividades da Unidade 1")  
 
 ## [Atividades da Unidade 2](Unidade2/ "Atividades da Unidade 2")  
