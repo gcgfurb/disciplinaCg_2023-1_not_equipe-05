@@ -4,7 +4,7 @@ Para desenvolver as atividades da disciplina de Computação Gráfica favor util
 
 Alunos:  
 
-    João Vitor Persuhn  
+    João Vitor de Oliveira  
     Matheus Petters Bevilaqua  
     Natália Sens Weise  
     Paulo Rubens de Moraes Leme Junior  
