@@ -61,7 +61,9 @@ namespace gcgcg
 #if CG_OpenGL && !CG_DirectX
       GL.BindVertexArray(_vertexArrayObject_sruEixos);
       _shaderAmarelo.Use();
-      GL.DrawArrays(primitivaTipo, 0, pontosLista.Count);
+      GL.Enable(EnableCap.ProgramPointSize);
+      GL.PointSize(5.0f);
+      GL.DrawArrays(PrimitiveType.Points, 0, pontosLista.Count);
 #elif CG_DirectX && !CG_OpenGL
       Console.WriteLine(" .. Coloque aqui o seu código em DirectX");
 #elif (CG_DirectX && CG_OpenGL) || (!CG_DirectX && !CG_OpenGL)
