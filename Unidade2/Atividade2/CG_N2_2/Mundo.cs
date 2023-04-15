@@ -81,34 +81,10 @@ namespace gcgcg
       _shaderVerde = new Shader("Shaders/shader.vert", "Shaders/shaderVerde.frag");
       _shaderAzul = new Shader("Shaders/shader.vert", "Shaders/shaderAzul.frag");
 
-      Objeto objetoNovo = null;
-
-      // #region Objeto: polígono qualquer  
-      // objetoNovo = new Poligono(null);
-      // objetoNovo.PontosAdicionar(new Ponto4D(0.25, 0.25));
-      // objetoNovo.PontosAdicionar(new Ponto4D(0.75, 0.25));
-      // objetoNovo.PontosAdicionar(new Ponto4D(0.75, 0.75));
-      // objetoNovo.PontosAdicionar(new Ponto4D(0.50, 0.50));
-      // objetoNovo.PontosAdicionar(new Ponto4D(0.25, 0.75));
-      // ObjetoNovo(objetoNovo); objetoNovo = null;
-      // #endregion
-      // #region NÃO USAR: declara um objeto filho ao polígono
-      // objetoNovo = new Ponto(null, new Ponto4D(0.50, 0.75));
-      // ObjetoNovo(objetosLista[0], objetoNovo); objetoNovo = null;
-      // #endregion
-
-      // #region Objeto: retângulo  
-      // objetoNovo = new Retangulo(null, new Ponto4D(-0.25, 0.25), new Ponto4D(-0.75, 0.75));
-      // objetoNovo.PrimitivaTipo = PrimitiveType.LineLoop;
-      // ObjetoNovo(objetoNovo); objetoNovo = null;
-      // #endregion
-
-      // #region Objeto: segmento de reta  
-      // objetoNovo = new SegReta(null, new Ponto4D(-0.25, -0.25), new Ponto4D(-0.75, -0.75));
-      // ObjetoNovo(objetoNovo); objetoNovo = null;
-      // #endregion
-
-      
+      #region Objeto: retângulo  
+      objetoSelecionado = new Retangulo(null, new Ponto4D(-0.5, -0.5), new Ponto4D(0.5, 0.5));
+      ObjetoNovo(objetoSelecionado);
+      #endregion
 
 #if CG_Privado
       #region Objeto: circulo  
@@ -132,6 +108,38 @@ namespace gcgcg
 
     }
 
+    private void drawOnScreen()
+    {
+      counter++;
+      switch(counter){
+        case 0 :
+          objetoSelecionado.PrimitivaTipo = PrimitiveType.Points;
+          break;
+        case 1:
+          objetoSelecionado.PrimitivaTipo = PrimitiveType.Lines;
+          break;
+        case 2:
+          objetoSelecionado.PrimitivaTipo = PrimitiveType.LineLoop;
+          break;
+        case 3:
+          objetoSelecionado.PrimitivaTipo = PrimitiveType.LineStrip;
+          break;
+        case 4:
+          objetoSelecionado.PrimitivaTipo = PrimitiveType.Triangles;
+          break;
+        case 5:
+          objetoSelecionado.PrimitivaTipo = PrimitiveType.TriangleStrip;
+          break;
+        case 6:
+          objetoSelecionado.PrimitivaTipo = PrimitiveType.TriangleFan;
+          counter=-1;
+          break;
+        default:
+          break;
+      }
+      objetoSelecionado.ObjetoAtualizar();
+    }
+
     protected override void OnRenderFrame(FrameEventArgs e)
     {
       base.OnRenderFrame(e);
@@ -145,68 +153,6 @@ namespace gcgcg
         objetosLista[i].Desenhar();
 
       SwapBuffers();
-    }
-
-    private void drawOnScreen(int counter)
-    {
-      switch(counter){
-        case 0 :
-          #region Objeto: ponto  
-          objetoSelecionado = new Ponto(null, new Ponto4D(0.5, 0.5));
-          objetoSelecionado.PrimitivaTipo = PrimitiveType.Points;
-          objetoSelecionado.PrimitivaTamanho = 10;
-          ObjetoNovo(objetoSelecionado); objetoSelecionado = null;
-          #endregion
-
-          #region Objeto: ponto  
-          objetoSelecionado = new Ponto(null, new Ponto4D(-0.5, 0.5));
-          objetoSelecionado.PrimitivaTipo = PrimitiveType.Points;
-          objetoSelecionado.PrimitivaTamanho = 10;
-          ObjetoNovo(objetoSelecionado); objetoSelecionado = null;
-          #endregion
-          
-          #region Objeto: ponto  
-          objetoSelecionado = new Ponto(null, new Ponto4D(-0.5, -0.5));
-          objetoSelecionado.PrimitivaTipo = PrimitiveType.Points;
-          objetoSelecionado.PrimitivaTamanho = 10;
-          ObjetoNovo(objetoSelecionado); objetoSelecionado = null;
-          #endregion
-          
-          #region Objeto: ponto  
-          objetoSelecionado = new Ponto(null, new Ponto4D(0.5, -0.5));
-          objetoSelecionado.PrimitivaTipo = PrimitiveType.Points;
-          objetoSelecionado.PrimitivaTamanho = 10;
-          ObjetoNovo(objetoSelecionado); objetoSelecionado = null;
-          #endregion
-          break;
-        // case 1:
-        //   #region Objeto: segmento de reta  
-        //   objetoSelecionado = new SegReta(null, new Ponto4D(-0.5, 0.5), new Ponto4D(0.5, 0.5));
-        //   ObjetoNovo(objetoSelecionado); 
-        //   objetoSelecionado = null;
-        //   #endregion
-        //   #region Objeto: segmento de reta  
-        //   objetoSelecionado = new SegReta(null, new Ponto4D(-0.5, -0.5), new Ponto4D(0.5, -0.5));
-        //   ObjetoNovo(objetoSelecionado); 
-        //   objetoSelecionado = null;
-        //   #endregion
-        //   break;
-        // case 2:
-          #region Objeto: segmento de reta  
-          objetoSelecionado = new SegReta(null, new Ponto4D(-0.5, 0.5), new Ponto4D(-0.5, -0.5));
-          ObjetoNovo(objetoSelecionado); 
-          objetoSelecionado = null;
-          #endregion
-          #region Objeto: segmento de reta  
-          objetoSelecionado = new SegReta(null, new Ponto4D(0.5, 0.5), new Ponto4D(0.5, -0.5));
-          ObjetoNovo(objetoSelecionado); 
-          objetoSelecionado = null;
-          #endregion
-          break;
-        default:
-          break;
-      }
-      counter++;
     }
 
     protected override void OnUpdateFrame(FrameEventArgs e)
@@ -236,8 +182,7 @@ namespace gcgcg
           {
             if (input.IsKeyPressed(Keys.Space))
             {
-
-              drawOnScreen(counter);
+              drawOnScreen();
               
               if (objetoSelecionado == null)
                 Console.WriteLine("objetoSelecionado: NULL!");
