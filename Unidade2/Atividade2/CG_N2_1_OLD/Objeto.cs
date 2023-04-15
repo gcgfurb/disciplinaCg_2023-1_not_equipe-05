@@ -28,9 +28,8 @@ namespace gcgcg
     private int _vertexArrayObject_sruEixos;
     private Shader _shaderAmarelo;
 
-    public Objeto(char rotulo, Objeto paiRef)
+    public Objeto(Objeto paiRef)
     {
-      this.rotulo = rotulo;
       this.paiRef = paiRef;
     }
 

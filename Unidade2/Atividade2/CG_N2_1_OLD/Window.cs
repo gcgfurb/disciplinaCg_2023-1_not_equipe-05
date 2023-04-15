@@ -64,15 +64,9 @@ namespace gcgcg
       _shaderAzul = new Shader("Shaders/shader.vert", "Shaders/shaderAzul.frag");
       
 
-      objetoNovo = new Objeto(objetoId, null);      
-      Ponto4D pto = new Ponto4D();
-      for (int i=0; i<360; i+=5){
-        pto = Matematica.GerarPtosCirculo(i, 0.5);
-        objetoNovo.PontosAdicionar(pto);
-      }
-      objetoNovo.Atualizar();
-      objetosLista.Add(objetoNovo);
-      objetoNovo = null;
+      Objeto circulo = new Circulo(null, 0.5);
+      circulo.Atualizar();
+      objetosLista.Add(circulo);
     }
 
     protected override void OnRenderFrame(FrameEventArgs e)
