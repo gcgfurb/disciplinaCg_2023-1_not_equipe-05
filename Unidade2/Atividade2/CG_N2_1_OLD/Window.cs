@@ -19,12 +19,12 @@ namespace gcgcg
   {
     private readonly float[] _sruEixos =
     {
-       0.6f,  0.0f,  0.0f, // X+
+       0.5f,  0.0f,  0.0f, // X+
        0.0f,  0.0f,  0.0f, // X-
-       0.0f,  0.6f,  0.0f, // Y+
+       0.0f,  0.5f,  0.0f, // Y+
        0.0f,  0.0f,  0.0f, // Y-
-       0.0f,  0.0f,  0.6f, // Z+
-       0.0f,  0.0f, -0.6f, // Z-
+       0.0f,  0.0f,  0.5f, // Z+
+       0.0f,  0.0f, -0.5f, // Z-
     };
 
     private int _vertexBufferObject_sruEixos;
@@ -49,7 +49,7 @@ namespace gcgcg
       base.OnLoad();
 
       // define cor do fundo
-      GL.ClearColor(0.6f, 0.6f, 0.6f, 1.0f); 
+      GL.ClearColor( 0.27f, 0.5f, 0.7f, 1.0f); 
       
       // Eixos
       _vertexBufferObject_sruEixos = GL.GenBuffer();
@@ -67,7 +67,7 @@ namespace gcgcg
       objetoNovo = new Objeto(objetoId, null);      
       Ponto4D pto = new Ponto4D();
       for (int i=0; i<360; i+=5){
-        pto = Matematica.GerarPtosCirculo(i, 0.3);
+        pto = Matematica.GerarPtosCirculo(i, 0.5);
         objetoNovo.PontosAdicionar(pto);
       }
       objetoNovo.Atualizar();
