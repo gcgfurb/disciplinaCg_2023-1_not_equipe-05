@@ -8,7 +8,7 @@ namespace gcgcg
     {
         public Circulo(Objeto paiRef, double tam) : base(paiRef)
         {
-            PrimitivaTipo = PrimitiveType.Points;
+            PrimitivaTipo = PrimitiveType.Quads;
             Ponto4D pto = new Ponto4D();
             for (int i=0; i<360; i+=5){
                 pto = Matematica.GerarPtosCirculo(i, tam);
