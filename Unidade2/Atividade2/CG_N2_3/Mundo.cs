@@ -20,6 +20,8 @@ namespace gcgcg
   {
     private List<Objeto> objetosLista = new List<Objeto>();
     private Objeto objetoSelecionado = null;
+    private Objeto circulo = null;
+    private float raio = 0.5f;
     private Objeto objetoNovo = null;
     private char rotulo = '@';
 
@@ -83,11 +85,11 @@ namespace gcgcg
       _shaderVerde = new Shader("Shaders/shader.vert", "Shaders/shaderVerde.frag");
       _shaderAzul = new Shader("Shaders/shader.vert", "Shaders/shaderAzul.frag");
 
-      objetoNovo = new Circulo(null, 0.5f);
-      ObjetoNovo(objetoNovo); 
+      circulo = new Circulo(null, raio);
+      ObjetoNovo(circulo); 
 
       #region Objeto: segmento de reta  
-      objetoSelecionado = new SegReta(objetoNovo, new Ponto4D(0, 0), objetoNovo.PontosId(index));
+      objetoSelecionado = new SegReta(circulo, new Ponto4D(0, 0), circulo.PontosId(index));
       ObjetoNovo(objetoSelecionado); 
       #endregion
   
@@ -152,15 +154,30 @@ namespace gcgcg
         {
           if (input.IsKeyPressed(Keys.A))
           {
-            // ideia: incrementar e decrementar todos os pontos do circulo, com um while
-            Ponto4D teste = new Ponto4D(objetoSelecionado.PontosId(1));
-            objetoSelecionado.PontosAlterar(new Ponto4D(teste.X - 0.05f, teste.Y - 0.05f), 1);
+            raio -= 0.05f;
+            Ponto4D pto;
+            int contador = 0;
+            for (int i=0; i<360; i+=5){
+              pto = Matematica.GerarPtosCirculo(i, raio);
+              circulo.PontosAlterar(pto, contador);
+              objetoSelecionado.PontosAlterar(circulo.PontosId(index), 1);
+              contador++;
+            }
+            circulo.ObjetoAtualizar();
             objetoSelecionado.ObjetoAtualizar();
           }
           else if (input.IsKeyPressed(Keys.S))
           {
-            Ponto4D teste = new Ponto4D(objetoSelecionado.PontosId(1));
-            objetoSelecionado.PontosAlterar(new Ponto4D(teste.X + 0.05f, teste.Y + 0.05f), 1);
+            raio += 0.05f;
+            Ponto4D pto;
+            int contador = 0;
+            for (int i=0; i<360; i+=5){
+              pto = Matematica.GerarPtosCirculo(i, raio);
+              circulo.PontosAlterar(pto, contador);
+              objetoSelecionado.PontosAlterar(circulo.PontosId(index), 1);
+              contador++;
+            }
+            circulo.ObjetoAtualizar();
             objetoSelecionado.ObjetoAtualizar();
           }
           else if (input.IsKeyPressed(Keys.Z))
@@ -169,7 +186,7 @@ namespace gcgcg
             if (index < 0){
               index = 71;
             }
-            objetoSelecionado.PontosAlterar(objetoNovo.PontosId(index), 1);
+            objetoSelecionado.PontosAlterar(circulo.PontosId(index), 1);
             objetoSelecionado.ObjetoAtualizar();
           }
           else if (input.IsKeyPressed(Keys.X))
@@ -178,7 +195,7 @@ namespace gcgcg
             if (index > 71){
               index = 0;
             }
-            objetoSelecionado.PontosAlterar(objetoNovo.PontosId(index), 1);
+            objetoSelecionado.PontosAlterar(circulo.PontosId(index), 1);
             objetoSelecionado.ObjetoAtualizar();
           }
           else
