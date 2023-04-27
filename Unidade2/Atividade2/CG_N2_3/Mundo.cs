@@ -22,6 +22,7 @@ namespace gcgcg
     private Objeto objetoSelecionado = null;
     private Objeto circulo = null;
     private float raio = 0.5f;
+    private float distanciaCentro = 0.0f;
     private Objeto objetoNovo = null;
     private char rotulo = '@';
 
@@ -89,7 +90,7 @@ namespace gcgcg
       ObjetoNovo(circulo); 
 
       #region Objeto: segmento de reta  
-      objetoSelecionado = new SegReta(circulo, new Ponto4D(0, 0), circulo.PontosId(index));
+      objetoSelecionado = new SegReta(circulo, new Ponto4D(0.0f, 0.0f), circulo.PontosId(index));
       ObjetoNovo(objetoSelecionado); 
       #endregion
   
@@ -155,11 +156,12 @@ namespace gcgcg
           if (input.IsKeyPressed(Keys.A))
           {
             raio -= 0.05f;
-            Ponto4D pto;
+            Ponto4D pto, pto1;
             int contador = 0;
-            for (int i=0; i<360; i+=5){
+            for (int i = 0; i<360; i+=5){
               pto = Matematica.GerarPtosCirculo(i, raio);
-              circulo.PontosAlterar(pto, contador);
+              pto1 = new Ponto4D(pto.X, pto.Y - distanciaCentro);
+              circulo.PontosAlterar(pto1, contador);
               objetoSelecionado.PontosAlterar(circulo.PontosId(index), 1);
               contador++;
             }
@@ -169,11 +171,12 @@ namespace gcgcg
           else if (input.IsKeyPressed(Keys.S))
           {
             raio += 0.05f;
-            Ponto4D pto;
+            Ponto4D pto, pto1;
             int contador = 0;
-            for (int i=0; i<360; i+=5){
+            for (int i = 0; i<360; i+=5){
               pto = Matematica.GerarPtosCirculo(i, raio);
-              circulo.PontosAlterar(pto, contador);
+              pto1 = new Ponto4D(pto.X, pto.Y + distanciaCentro);
+              circulo.PontosAlterar(pto1, contador);
               objetoSelecionado.PontosAlterar(circulo.PontosId(index), 1);
               contador++;
             }
@@ -196,6 +199,34 @@ namespace gcgcg
               index = 0;
             }
             objetoSelecionado.PontosAlterar(circulo.PontosId(index), 1);
+            objetoSelecionado.ObjetoAtualizar();
+          }
+          else if (input.IsKeyPressed(Keys.Q))
+          {
+            Ponto4D pto;
+            distanciaCentro-=0.05f;
+            for (int i = 0; i<72; i++){
+              pto = new Ponto4D(circulo.PontosId(i).X - 0.05f, circulo.PontosId(i).Y);
+              circulo.PontosAlterar(pto, i);
+              objetoSelecionado.PontosAlterar(circulo.PontosId(index), 1);
+            }
+            pto = new Ponto4D(objetoSelecionado.PontosId(0).X - 0.05f, objetoSelecionado.PontosId(0).Y);
+            objetoSelecionado.PontosAlterar(pto, 0);
+            circulo.ObjetoAtualizar();
+            objetoSelecionado.ObjetoAtualizar();
+          }
+          else if (input.IsKeyPressed(Keys.W))
+          {
+            Ponto4D pto;
+            distanciaCentro+=0.05f;
+            for (int i = 0; i<72; i++){
+              pto = new Ponto4D(circulo.PontosId(i).X + 0.05f, circulo.PontosId(i).Y);
+              circulo.PontosAlterar(pto, i);
+              objetoSelecionado.PontosAlterar(circulo.PontosId(index), 1);
+            }
+            pto = new Ponto4D(objetoSelecionado.PontosId(0).X + 0.05f, objetoSelecionado.PontosId(0).Y);
+            objetoSelecionado.PontosAlterar(pto, 0);
+            circulo.ObjetoAtualizar();
             objetoSelecionado.ObjetoAtualizar();
           }
           else
