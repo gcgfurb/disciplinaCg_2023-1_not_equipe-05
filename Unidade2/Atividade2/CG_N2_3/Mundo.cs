@@ -160,8 +160,22 @@ namespace gcgcg
             int contador = 0;
             for (int i = 0; i<360; i+=5){
               pto = Matematica.GerarPtosCirculo(i, raio);
-              pto1 = new Ponto4D(pto.X, pto.Y - distanciaCentro);
-              circulo.PontosAlterar(pto1, contador);
+              if (i <= 180){
+                pto1 = new Ponto4D(pto.X + distanciaCentro, pto.Y);
+                circulo.PontosAlterar(pto1, contador);
+              }
+              else if (i <= 90){
+                pto1 = new Ponto4D(pto.X, pto.Y + distanciaCentro);
+                circulo.PontosAlterar(pto1, contador);
+              }
+              else if (i <= 270){
+                pto1 = new Ponto4D(pto.X + distanciaCentro, pto.Y);
+                circulo.PontosAlterar(pto1, contador);
+              }
+              else if (i > 270){
+                pto1 = new Ponto4D(pto.X + distanciaCentro, pto.Y);
+                circulo.PontosAlterar(pto1, contador);
+              }
               objetoSelecionado.PontosAlterar(circulo.PontosId(index), 1);
               contador++;
             }
@@ -175,8 +189,22 @@ namespace gcgcg
             int contador = 0;
             for (int i = 0; i<360; i+=5){
               pto = Matematica.GerarPtosCirculo(i, raio);
-              pto1 = new Ponto4D(pto.X, pto.Y + distanciaCentro);
-              circulo.PontosAlterar(pto1, contador);
+              if (i <= 180){
+                pto1 = new Ponto4D(pto.X + distanciaCentro, pto.Y);
+                circulo.PontosAlterar(pto1, contador);
+              }
+              else if (i <= 90){
+                pto1 = new Ponto4D(pto.X, pto.Y + distanciaCentro);
+                circulo.PontosAlterar(pto1, contador);
+              }
+              else if (i <= 270){
+                pto1 = new Ponto4D(pto.X + distanciaCentro, pto.Y);
+                circulo.PontosAlterar(pto1, contador);
+              }
+              else if (i > 270){
+                pto1 = new Ponto4D(pto.X + distanciaCentro, pto.Y);
+                circulo.PontosAlterar(pto1, contador);
+              }
               objetoSelecionado.PontosAlterar(circulo.PontosId(index), 1);
               contador++;
             }
