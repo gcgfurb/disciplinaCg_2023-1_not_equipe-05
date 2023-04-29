@@ -20,6 +20,9 @@ namespace gcgcg
   {
     private List<Objeto> objetosLista = new List<Objeto>();
     private Objeto objetoSelecionado = null;
+    private Objeto p1, p2, p3, p4;
+    private List<Objeto> pontos = new List<Objeto>();
+    private int contador = 0;
     private char rotulo = '@';
 
     private readonly float[] _sruEixos =
@@ -107,22 +110,34 @@ namespace gcgcg
       // ObjetoNovo(objetoNovo); objetoNovo = null;
       // #endregion
 
-      Objeto p1 = new Ponto(null, new Ponto4D(0.5, -0.5));
-      Objeto p2 = new Ponto(null, new Ponto4D(0.5, 0.5));
-      Objeto p3 = new Ponto(null, new Ponto4D(-0.5, -0.5));
-      Objeto p4 = new Ponto(null, new Ponto4D(-0.5, 0.5));
+      p1 = new Ponto(null, new Ponto4D(-0.5, -0.5));
+      p2 = new Ponto(null, new Ponto4D(-0.5, 0.5));
+      p3 = new Ponto(null, new Ponto4D(0.5, 0.5));
+      p4 = new Ponto(null, new Ponto4D(0.5, -0.5));
 
+      pontos.Add(p1);
       ObjetoNovo(p1);
+
+      pontos.Add(p2);
       ObjetoNovo(p2);
+
+      pontos.Add(p3);
       ObjetoNovo(p3);
+
+      pontos.Add(p4);
       ObjetoNovo(p4);
 
-      Objeto s1 = new SegReta(null, p4.PontosId(0), p2.PontosId(0));
-      Objeto s2 = new SegReta(null, p1.PontosId(0), p2.PontosId(0));
-      Objeto s3 = new SegReta(null, p3.PontosId(0), p4.PontosId(0));
-      ObjetoNovo(s1);
-      ObjetoNovo(s2);
-      ObjetoNovo(s3);
+      // Objeto s1 = new SegReta(null, pontos[0].PontosId(0), pontos[1].PontosId(0));
+      // Objeto s2 = new SegReta(null, pontos[1].PontosId(0), pontos[2].PontosId(0));
+      // Objeto s3 = new SegReta(null, pontos[2].PontosId(0), pontos[3].PontosId(0));
+      // ObjetoNovo(s1);
+      // ObjetoNovo(s2);
+      // ObjetoNovo(s3);
+
+      objetoSelecionado = pontos[contador];
+      // objetoSelecionado.shaderCor = new Shader("Shaders/shader.vert", "Shaders/shaderVermelha.frag");
+      objetoSelecionado.ObjetoAtualizar();
+
 
       // #region Objeto: ponto  
       // objetoNovo = new Ponto(null, new Ponto4D(0.25, -0.25));
@@ -193,34 +208,55 @@ namespace gcgcg
           }
           else
           {
-            if (input.IsKeyPressed(Keys.Space))
-            {
-              if (objetoSelecionado == null)
-                Console.WriteLine("objetoSelecionado: NULL!");
-              else if (objetosLista.Count == 0)
-                Console.WriteLine("objetoLista: vazia!");
-              else
-              {
-                int ind = 0;
-                foreach (var objetoNovo in objetosLista)
-                {
-                  if (objetoNovo == objetoSelecionado)
-                  {
-                    ind++;
-                    if (ind >= objetosLista.Count)
-                      ind = 0;
-                    break;
-                  }
-                  ind++;
-                }
-                objetoSelecionado = objetosLista[ind];
-              }
+            if (input.IsKeyPressed(Keys.C)){
+              Ponto4D pto = new Ponto4D(objetoSelecionado.PontosId(0).X, objetoSelecionado.PontosId(0).Y + 0.05f);
+              objetoSelecionado.PontosAlterar(pto, 0);
+              objetoSelecionado.ObjetoAtualizar();
             }
             else
             {
-              if (input.IsKeyPressed(Keys.C))
+              if (input.IsKeyPressed(Keys.Space))
               {
-                objetoSelecionado.shaderCor = new Shader("Shaders/shader.vert", "Shaders/shaderCiano.frag");
+                // objetoSelecionado.shaderCor = new Shader("Shaders/shader.vert", "Shaders/shaderBranca.frag");
+                contador+= 1;
+                if (contador < 4){
+                  objetoSelecionado = pontos[contador];
+                  objetoSelecionado.ObjetoAtualizar();
+                }
+                // objetoSelecionado.shaderCor = new Shader("Shaders/shader.vert", "Shaders/shaderVermelha.frag");
+                else {
+                  contador = 0;
+                }
+                objetoSelecionado = pontos[contador];
+                objetoSelecionado.ObjetoAtualizar();
+
+                if (objetoSelecionado == null)
+                  Console.WriteLine("objetoSelecionado: NULL!");
+                else if (objetosLista.Count == 0)
+                  Console.WriteLine("objetoLista: vazia!");
+                else
+                {
+                  int ind = 0;
+                  foreach (var objetoNovo in objetosLista)
+                  {
+                    if (objetoNovo == objetoSelecionado)
+                    {
+                      ind++;
+                      if (ind >= objetosLista.Count)
+                        ind = 0;
+                      break;
+                    }
+                    ind++;
+                  }
+                  objetoSelecionado = objetosLista[ind];
+                }
+              }
+              else
+              {
+                if (input.IsKeyPressed(Keys.C))
+                {
+                  objetoSelecionado.shaderCor = new Shader("Shaders/shader.vert", "Shaders/shaderCiano.frag");
+                }
               }
             }
           }
