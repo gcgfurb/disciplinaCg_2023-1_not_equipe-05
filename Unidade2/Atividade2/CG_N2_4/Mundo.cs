@@ -20,9 +20,9 @@ namespace gcgcg
   {
     private List<Objeto> objetosLista = new List<Objeto>();
     private Objeto objetoSelecionado = null;
-    private Objeto p1, p2, p3, p4;
-    private List<Objeto> pontos = new List<Objeto>();
-    private int contador = 0;
+    private List<Objeto> retaSelecionada = null;
+    private Objeto p1, p2, p3, p4, s1, s2, s3;
+    private int contador, tamanhoLista = 0;
     private char rotulo = '@';
 
     private readonly float[] _sruEixos =
@@ -114,27 +114,19 @@ namespace gcgcg
       p2 = new Ponto(null, new Ponto4D(-0.5, 0.5));
       p3 = new Ponto(null, new Ponto4D(0.5, 0.5));
       p4 = new Ponto(null, new Ponto4D(0.5, -0.5));
-
-      pontos.Add(p1);
       ObjetoNovo(p1);
-
-      pontos.Add(p2);
       ObjetoNovo(p2);
-
-      pontos.Add(p3);
       ObjetoNovo(p3);
-
-      pontos.Add(p4);
       ObjetoNovo(p4);
 
-      // Objeto s1 = new SegReta(null, pontos[0].PontosId(0), pontos[1].PontosId(0));
-      // Objeto s2 = new SegReta(null, pontos[1].PontosId(0), pontos[2].PontosId(0));
-      // Objeto s3 = new SegReta(null, pontos[2].PontosId(0), pontos[3].PontosId(0));
-      // ObjetoNovo(s1);
-      // ObjetoNovo(s2);
-      // ObjetoNovo(s3);
+      s1 = new SegReta(null, p1.PontosId(0), p2.PontosId(0));
+      s2 = new SegReta(null, p2.PontosId(0), p3.PontosId(0));
+      s3 = new SegReta(null, p3.PontosId(0), p4.PontosId(0));
+      ObjetoNovo(s1);
+      ObjetoNovo(s2);
+      ObjetoNovo(s3);
 
-      objetoSelecionado = pontos[contador];
+      objetoSelecionado = p1;
       // objetoSelecionado.shaderCor = new Shader("Shaders/shader.vert", "Shaders/shaderVermelha.frag");
       objetoSelecionado.ObjetoAtualizar();
 
@@ -211,24 +203,78 @@ namespace gcgcg
             if (input.IsKeyPressed(Keys.C)){
               Ponto4D pto = new Ponto4D(objetoSelecionado.PontosId(0).X, objetoSelecionado.PontosId(0).Y + 0.05f);
               objetoSelecionado.PontosAlterar(pto, 0);
+              // for (int i = 0; i < tamanhoLista; i++){
+              //   retaSelecionada[i].PontosAlterar(objetoSelecionado.PontosId(0), 0);
+              //   retaSelecionada[i].ObjetoAtualizar();
+              // }
+              objetoSelecionado.ObjetoAtualizar();
+            }
+            else if (input.IsKeyPressed(Keys.B)){
+              Ponto4D pto = new Ponto4D(objetoSelecionado.PontosId(0).X, objetoSelecionado.PontosId(0).Y - 0.05f);
+              objetoSelecionado.PontosAlterar(pto, 0);
+              objetoSelecionado.ObjetoAtualizar();
+            }
+            else if (input.IsKeyPressed(Keys.E)){
+              Ponto4D pto = new Ponto4D(objetoSelecionado.PontosId(0).X - 0.05f, objetoSelecionado.PontosId(0).Y);
+              objetoSelecionado.PontosAlterar(pto, 0);
+              objetoSelecionado.ObjetoAtualizar();
+            }
+            else if (input.IsKeyPressed(Keys.D)){
+              Ponto4D pto = new Ponto4D(objetoSelecionado.PontosId(0).X + 0.05f, objetoSelecionado.PontosId(0).Y);
+              objetoSelecionado.PontosAlterar(pto, 0);
               objetoSelecionado.ObjetoAtualizar();
             }
             else
             {
               if (input.IsKeyPressed(Keys.Space))
               {
-                // objetoSelecionado.shaderCor = new Shader("Shaders/shader.vert", "Shaders/shaderBranca.frag");
-                contador+= 1;
-                if (contador < 4){
-                  objetoSelecionado = pontos[contador];
-                  objetoSelecionado.ObjetoAtualizar();
+                // retaSelecionada.Clear();
+                tamanhoLista = 0;
+                switch(contador){
+                  case 0:
+                    tamanhoLista = 1;
+                    objetoSelecionado = p1;
+                    // retaSelecionada.Add(s1);
+                    // s1.PontosAlterar(objetoSelecionado.PontosId(0), 0);
+                    // s1.ObjetoAtualizar();
+                    break;
+                  case 1:
+                    tamanhoLista = 2;
+                    objetoSelecionado = p2;
+                    // retaSelecionada.Add(s1);
+                    // retaSelecionada.Add(s2);
+                    // s1.PontosAlterar(objetoSelecionado.PontosId(0), 1);
+                    // s1.ObjetoAtualizar();
+                    // s2.PontosAlterar(objetoSelecionado.PontosId(0), 0);
+                    // s2.ObjetoAtualizar();
+                    break;
+                  case 2:
+                    tamanhoLista = 2;
+                    objetoSelecionado = p3;
+                    // retaSelecionada.Add(s2);
+                    // retaSelecionada.Add(s3);
+                    // s2.PontosAlterar(objetoSelecionado.PontosId(0), 1);
+                    // s2.ObjetoAtualizar();
+                    // s3.PontosAlterar(objetoSelecionado.PontosId(0), 0);
+                    // s3.ObjetoAtualizar();
+                    break;
+                  case 3:
+                    tamanhoLista = 1;
+                    objetoSelecionado = p4;
+                    // retaSelecionada.Add(s3);
+                    // s3.PontosAlterar(objetoSelecionado.PontosId(0), 1);
+                    // s3.ObjetoAtualizar();
+                    break;
+                  default:
+                    break;
                 }
-                // objetoSelecionado.shaderCor = new Shader("Shaders/shader.vert", "Shaders/shaderVermelha.frag");
-                else {
+                contador++;
+                if (contador > 3){
                   contador = 0;
                 }
-                objetoSelecionado = pontos[contador];
                 objetoSelecionado.ObjetoAtualizar();
+
+                
 
                 if (objetoSelecionado == null)
                   Console.WriteLine("objetoSelecionado: NULL!");
