@@ -65,6 +65,34 @@ namespace gcgcg
       }
     }
 
+    private void getSegReta(int contador, Ponto4D pto){
+      switch(contador){
+        case 0:
+          p1.PontosAlterar(pto, 0);
+          p1.ObjetoAtualizar();
+          s1.PontosAlterar(pto, 0);
+          s1.ObjetoAtualizar();
+          break;
+        case 1:
+          s1.PontosAlterar(pto, 1);
+          s1.ObjetoAtualizar();
+          s2.PontosAlterar(pto, 0);
+          s2.ObjetoAtualizar();
+          break;
+        case 2:
+          s2.PontosAlterar(pto, 1);
+          s2.ObjetoAtualizar();
+          s3.PontosAlterar(pto, 0);
+          s3.ObjetoAtualizar();
+          break;
+        case 3:
+          s3.PontosAlterar(pto, 1);
+          s3.ObjetoAtualizar();
+          break;
+        default:
+          break;
+      }
+    }
     protected override void OnLoad()
     {
       base.OnLoad();
@@ -127,7 +155,6 @@ namespace gcgcg
       ObjetoNovo(s3);
 
       objetoSelecionado = p1;
-      // objetoSelecionado.shaderCor = new Shader("Shaders/shader.vert", "Shaders/shaderVermelha.frag");
       objetoSelecionado.ObjetoAtualizar();
 
 
@@ -203,67 +230,46 @@ namespace gcgcg
             if (input.IsKeyPressed(Keys.C)){
               Ponto4D pto = new Ponto4D(objetoSelecionado.PontosId(0).X, objetoSelecionado.PontosId(0).Y + 0.05f);
               objetoSelecionado.PontosAlterar(pto, 0);
-              // for (int i = 0; i < tamanhoLista; i++){
-              //   retaSelecionada[i].PontosAlterar(objetoSelecionado.PontosId(0), 0);
-              //   retaSelecionada[i].ObjetoAtualizar();
-              // }
               objetoSelecionado.ObjetoAtualizar();
+              getSegReta(contador, pto);
             }
             else if (input.IsKeyPressed(Keys.B)){
               Ponto4D pto = new Ponto4D(objetoSelecionado.PontosId(0).X, objetoSelecionado.PontosId(0).Y - 0.05f);
               objetoSelecionado.PontosAlterar(pto, 0);
               objetoSelecionado.ObjetoAtualizar();
+              getSegReta(contador, pto);
             }
             else if (input.IsKeyPressed(Keys.E)){
               Ponto4D pto = new Ponto4D(objetoSelecionado.PontosId(0).X - 0.05f, objetoSelecionado.PontosId(0).Y);
               objetoSelecionado.PontosAlterar(pto, 0);
               objetoSelecionado.ObjetoAtualizar();
+              getSegReta(contador, pto);
             }
             else if (input.IsKeyPressed(Keys.D)){
               Ponto4D pto = new Ponto4D(objetoSelecionado.PontosId(0).X + 0.05f, objetoSelecionado.PontosId(0).Y);
               objetoSelecionado.PontosAlterar(pto, 0);
               objetoSelecionado.ObjetoAtualizar();
+              getSegReta(contador, pto);
             }
             else
             {
               if (input.IsKeyPressed(Keys.Space))
               {
-                // retaSelecionada.Clear();
-                tamanhoLista = 0;
                 switch(contador){
                   case 0:
-                    tamanhoLista = 1;
                     objetoSelecionado = p1;
-                    // retaSelecionada.Add(s1);
-                    // s1.PontosAlterar(objetoSelecionado.PontosId(0), 0);
-                    // s1.ObjetoAtualizar();
                     break;
                   case 1:
                     tamanhoLista = 2;
                     objetoSelecionado = p2;
-                    // retaSelecionada.Add(s1);
-                    // retaSelecionada.Add(s2);
-                    // s1.PontosAlterar(objetoSelecionado.PontosId(0), 1);
-                    // s1.ObjetoAtualizar();
-                    // s2.PontosAlterar(objetoSelecionado.PontosId(0), 0);
-                    // s2.ObjetoAtualizar();
                     break;
                   case 2:
                     tamanhoLista = 2;
                     objetoSelecionado = p3;
-                    // retaSelecionada.Add(s2);
-                    // retaSelecionada.Add(s3);
-                    // s2.PontosAlterar(objetoSelecionado.PontosId(0), 1);
-                    // s2.ObjetoAtualizar();
-                    // s3.PontosAlterar(objetoSelecionado.PontosId(0), 0);
-                    // s3.ObjetoAtualizar();
                     break;
                   case 3:
                     tamanhoLista = 1;
                     objetoSelecionado = p4;
-                    // retaSelecionada.Add(s3);
-                    // s3.PontosAlterar(objetoSelecionado.PontosId(0), 1);
-                    // s3.ObjetoAtualizar();
                     break;
                   default:
                     break;
