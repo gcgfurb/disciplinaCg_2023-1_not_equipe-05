@@ -19,7 +19,8 @@ namespace gcgcg
   public class Mundo : GameWindow
   {
     private List<Objeto> objetosLista = new List<Objeto>();
-    private Objeto objetoSelecionado, objetoNovo = null;
+    private Objeto objetoSelecionado, circulo = null;
+    private float distanciaCima = 0.0f;
     private char rotulo = '@';
 
     private readonly float[] _sruEixos =
@@ -80,6 +81,8 @@ namespace gcgcg
       _shaderVerde = new Shader("Shaders/shader.vert", "Shaders/shaderVerde.frag");
       _shaderAzul = new Shader("Shaders/shader.vert", "Shaders/shaderAzul.frag");
 
+      Objeto objetoNovo = null;
+
       objetoNovo = new Circulo(null, 0.3);
       Ponto4D pto, pto1;
       int contador = 0;
@@ -98,23 +101,26 @@ namespace gcgcg
       objetosLista.Add(retangulo);
       objetoNovo = null;
 
-      objetoNovo = new Circulo(null, 0.1);
-      contador = 0;
-      for (int i = 0; i<360; i+=5){
-        pto = Matematica.GerarPtosCirculo(i, 0.1);
-        pto1 = new Ponto4D(pto.X + 0.3, pto.Y + 0.3);
-        objetoNovo.PontosAlterar(pto1, contador);
-        contador++;
-      }
-      objetoNovo.ObjetoAtualizar();
-      ObjetoNovo(objetoNovo); 
-      objetosLista.Add(objetoNovo);
 
       Objeto ponto = new Ponto(objetoNovo, new Ponto4D(0.3, 0.3));
       ponto.PrimitivaTamanho = 10;
       ponto.ObjetoAtualizar();
       ObjetoNovo(ponto);
       objetosLista.Add(ponto);
+
+      circulo = new Circulo(ponto, 0.1);
+      contador = 0;
+      for (int i = 0; i<360; i+=5){
+        pto = Matematica.GerarPtosCirculo(i, 0.1);
+        pto1 = new Ponto4D(pto.X + 0.3, pto.Y + 0.3);
+        circulo.PontosAlterar(pto1, contador);
+        contador++;
+      }
+      circulo.ObjetoAtualizar();
+      ObjetoNovo(circulo); 
+      objetosLista.Add(circulo);
+
+      
 
       objetoSelecionado = ponto;
 
@@ -182,30 +188,58 @@ namespace gcgcg
             if (input.IsKeyPressed(Keys.C)){
               Ponto4D pto, pto1;
               pto = new Ponto4D(objetoSelecionado.PontosId(0).X, objetoSelecionado.PontosId(0).Y + 0.05f);
+              objetoSelecionado.PontosAlterar(pto, 0);
+              objetoSelecionado.ObjetoAtualizar();
               int contador = 0;
               for (int i = 0; i<360; i+=5){
-                pto1 = new Ponto4D(objetoNovo.PontosId(i).X, objetoNovo.PontosId(i).Y + 0.05);
-                objetoNovo.PontosAlterar(pto1, i);
+                pto = circulo.PontosId(contador);
+                pto1 = new Ponto4D(pto.X, pto.Y + 0.05f);
+                circulo.PontosAlterar(pto1, contador);
+                circulo.ObjetoAtualizar();
                 contador++;
               }
-              objetoSelecionado.PontosAlterar(pto, 0);
-              objetoSelecionado.ObjetoAtualizar();
-              objetoNovo.ObjetoAtualizar();
             }
             else if (input.IsKeyPressed(Keys.B)){
-              Ponto4D pto = new Ponto4D(objetoSelecionado.PontosId(0).X, objetoSelecionado.PontosId(0).Y - 0.05f);
+              Ponto4D pto, pto1;
+              pto = new Ponto4D(objetoSelecionado.PontosId(0).X, objetoSelecionado.PontosId(0).Y - 0.05f);
               objetoSelecionado.PontosAlterar(pto, 0);
               objetoSelecionado.ObjetoAtualizar();
+              int contador = 0;
+              for (int i = 0; i<360; i+=5){
+                pto = circulo.PontosId(contador);
+                pto1 = new Ponto4D(pto.X, pto.Y - 0.05f);
+                circulo.PontosAlterar(pto1, contador);
+                circulo.ObjetoAtualizar();
+                contador++;
+              }
             }
             else if (input.IsKeyPressed(Keys.E)){
-              Ponto4D pto = new Ponto4D(objetoSelecionado.PontosId(0).X - 0.05f, objetoSelecionado.PontosId(0).Y);
+              Ponto4D pto, pto1;
+              pto = new Ponto4D(objetoSelecionado.PontosId(0).X - 0.05f, objetoSelecionado.PontosId(0).Y);
               objetoSelecionado.PontosAlterar(pto, 0);
               objetoSelecionado.ObjetoAtualizar();
+              int contador = 0;
+              for (int i = 0; i<360; i+=5){
+                pto = circulo.PontosId(contador);
+                pto1 = new Ponto4D(pto.X - 0.05f, pto.Y);
+                circulo.PontosAlterar(pto1, contador);
+                circulo.ObjetoAtualizar();
+                contador++;
+              }
             }
             else if (input.IsKeyPressed(Keys.D)){
-              Ponto4D pto = new Ponto4D(objetoSelecionado.PontosId(0).X + 0.05f, objetoSelecionado.PontosId(0).Y);
+              Ponto4D pto, pto1;
+              pto = new Ponto4D(objetoSelecionado.PontosId(0).X + 0.05f, objetoSelecionado.PontosId(0).Y);
               objetoSelecionado.PontosAlterar(pto, 0);
               objetoSelecionado.ObjetoAtualizar();
+              int contador = 0;
+              for (int i = 0; i<360; i+=5){
+                pto = circulo.PontosId(contador);
+                pto1 = new Ponto4D(pto.X + 0.05f, pto.Y);
+                circulo.PontosAlterar(pto1, contador);
+                circulo.ObjetoAtualizar();
+                contador++;
+              }
             }
             else
           {
