@@ -19,8 +19,7 @@ namespace gcgcg
   public class Mundo : GameWindow
   {
     private List<Objeto> objetosLista = new List<Objeto>();
-    private Objeto objetoSelecionado, circulo = null;
-    private float distanciaCima = 0.0f;
+    private Objeto objetoSelecionado, circulo, retangulo = null;
     private char rotulo = '@';
 
     private readonly float[] _sruEixos =
@@ -39,7 +38,6 @@ namespace gcgcg
 
     private bool _firstMove = true;
     private Vector2 _lastPos;
-
     public Mundo(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings)
            : base(gameWindowSettings, nativeWindowSettings)
     {
@@ -95,7 +93,7 @@ namespace gcgcg
       objetoNovo.ObjetoAtualizar();
       ObjetoNovo(objetoNovo); 
       objetosLista.Add(objetoNovo);
-      Objeto retangulo = new Retangulo(objetoNovo, objetoNovo.PontosId(9), objetoNovo.PontosId(45));
+      retangulo = new Retangulo(objetoNovo, objetoNovo.PontosId(9), objetoNovo.PontosId(45));
       retangulo.PrimitivaTipo = PrimitiveType.LineLoop;
       ObjetoNovo(retangulo);
       objetosLista.Add(retangulo);
@@ -119,9 +117,6 @@ namespace gcgcg
       circulo.ObjetoAtualizar();
       ObjetoNovo(circulo); 
       objetosLista.Add(circulo);
-
-      
-
       objetoSelecionado = ponto;
 
 #if CG_Privado
@@ -144,6 +139,22 @@ namespace gcgcg
       #endregion
 #endif
 
+    }
+
+    private void verifyCollision()
+    {
+      if (
+        objetoSelecionado.PontosId(0).Y >= retangulo.PontosId(0).Y ||
+        objetoSelecionado.PontosId(0).Y <= retangulo.PontosId(3).Y ||
+        objetoSelecionado.PontosId(0).X >= retangulo.PontosId(0).X ||
+        objetoSelecionado.PontosId(0).X <= retangulo.PontosId(2).X
+      )
+      {
+       retangulo.PrimitivaTipo = PrimitiveType.Points; 
+      }
+      else{
+        retangulo.PrimitivaTipo = PrimitiveType.LineLoop;
+      }
     }
 
     protected override void OnRenderFrame(FrameEventArgs e)
@@ -190,6 +201,7 @@ namespace gcgcg
               pto = new Ponto4D(objetoSelecionado.PontosId(0).X, objetoSelecionado.PontosId(0).Y + 0.05f);
               objetoSelecionado.PontosAlterar(pto, 0);
               objetoSelecionado.ObjetoAtualizar();
+              verifyCollision();
               int contador = 0;
               for (int i = 0; i<360; i+=5){
                 pto = circulo.PontosId(contador);
@@ -204,6 +216,7 @@ namespace gcgcg
               pto = new Ponto4D(objetoSelecionado.PontosId(0).X, objetoSelecionado.PontosId(0).Y - 0.05f);
               objetoSelecionado.PontosAlterar(pto, 0);
               objetoSelecionado.ObjetoAtualizar();
+              verifyCollision();
               int contador = 0;
               for (int i = 0; i<360; i+=5){
                 pto = circulo.PontosId(contador);
@@ -218,6 +231,7 @@ namespace gcgcg
               pto = new Ponto4D(objetoSelecionado.PontosId(0).X - 0.05f, objetoSelecionado.PontosId(0).Y);
               objetoSelecionado.PontosAlterar(pto, 0);
               objetoSelecionado.ObjetoAtualizar();
+              verifyCollision();
               int contador = 0;
               for (int i = 0; i<360; i+=5){
                 pto = circulo.PontosId(contador);
@@ -232,6 +246,7 @@ namespace gcgcg
               pto = new Ponto4D(objetoSelecionado.PontosId(0).X + 0.05f, objetoSelecionado.PontosId(0).Y);
               objetoSelecionado.PontosAlterar(pto, 0);
               objetoSelecionado.ObjetoAtualizar();
+              verifyCollision();
               int contador = 0;
               for (int i = 0; i<360; i+=5){
                 pto = circulo.PontosId(contador);
