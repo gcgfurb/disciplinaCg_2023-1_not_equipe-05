@@ -150,6 +150,9 @@ namespace gcgcg
       s1 = new SegReta(null, p1.PontosId(0), p2.PontosId(0));
       s2 = new SegReta(null, p2.PontosId(0), p3.PontosId(0));
       s3 = new SegReta(null, p3.PontosId(0), p4.PontosId(0));
+      s1.shaderCor = new Shader("Shaders/shader.vert", "Shaders/shaderCiano.frag");
+      s2.shaderCor = new Shader("Shaders/shader.vert", "Shaders/shaderCiano.frag");
+      s3.shaderCor = new Shader("Shaders/shader.vert", "Shaders/shaderCiano.frag");
       ObjetoNovo(s1);
       ObjetoNovo(s2);
       ObjetoNovo(s3);
@@ -208,6 +211,7 @@ namespace gcgcg
 
       #region Teclado
       var input = KeyboardState;
+      objetoSelecionado.shaderCor = _shaderVermelha;
       if (input.IsKeyDown(Keys.Escape))
       {
         Close();
@@ -255,20 +259,28 @@ namespace gcgcg
             {
               if (input.IsKeyPressed(Keys.Space))
               {
+                p1.shaderCor = new Shader("Shaders/shader.vert", "Shaders/shaderBranca.frag");
+                p2.shaderCor = new Shader("Shaders/shader.vert", "Shaders/shaderBranca.frag");
+                p3.shaderCor = new Shader("Shaders/shader.vert", "Shaders/shaderBranca.frag");
+                p4.shaderCor = new Shader("Shaders/shader.vert", "Shaders/shaderBranca.frag");
                 switch(contador){
                   case 0:
+                    p2.shaderCor = _shaderVermelha;
                     objetoSelecionado = p1;
                     break;
                   case 1:
                     tamanhoLista = 2;
+                    p3.shaderCor = _shaderVermelha;
                     objetoSelecionado = p2;
                     break;
                   case 2:
                     tamanhoLista = 2;
+                    p4.shaderCor = _shaderVermelha;
                     objetoSelecionado = p3;
                     break;
                   case 3:
                     tamanhoLista = 1;
+                    p1.shaderCor = _shaderVermelha;
                     objetoSelecionado = p4;
                     break;
                   default:
