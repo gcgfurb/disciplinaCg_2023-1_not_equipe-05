@@ -19,7 +19,7 @@ namespace gcgcg
   public class Mundo : GameWindow
   {
     private List<Objeto> objetosLista = new List<Objeto>();
-    private Objeto objetoSelecionado, circulo, retangulo = null;
+    private Objeto objetoSelecionado, circuloMaior, circulo, retangulo = null;
     private char rotulo = '@';
 
     private readonly float[] _sruEixos =
@@ -79,28 +79,25 @@ namespace gcgcg
       _shaderVerde = new Shader("Shaders/shader.vert", "Shaders/shaderVerde.frag");
       _shaderAzul = new Shader("Shaders/shader.vert", "Shaders/shaderAzul.frag");
 
-      Objeto objetoNovo = null;
-
-      objetoNovo = new Circulo(null, 0.3);
+      circuloMaior = new Circulo(null, 0.3);
       Ponto4D pto, pto1;
       int contador = 0;
       for (int i = 0; i<360; i+=5){
         pto = Matematica.GerarPtosCirculo(i, 0.3);
         pto1 = new Ponto4D(pto.X + 0.3, pto.Y + 0.3);
-        objetoNovo.PontosAlterar(pto1, contador);
+        circuloMaior.PontosAlterar(pto1, contador);
         contador++;
       }
-      objetoNovo.ObjetoAtualizar();
-      ObjetoNovo(objetoNovo); 
-      objetosLista.Add(objetoNovo);
-      retangulo = new Retangulo(objetoNovo, objetoNovo.PontosId(9), objetoNovo.PontosId(45));
+      circuloMaior.ObjetoAtualizar();
+      ObjetoNovo(circuloMaior); 
+      objetosLista.Add(circuloMaior);
+      retangulo = new Retangulo(circuloMaior, circuloMaior.PontosId(9), circuloMaior.PontosId(45));
       retangulo.PrimitivaTipo = PrimitiveType.LineLoop;
       ObjetoNovo(retangulo);
       objetosLista.Add(retangulo);
-      objetoNovo = null;
 
 
-      Objeto ponto = new Ponto(objetoNovo, new Ponto4D(0.3, 0.3));
+      Objeto ponto = new Ponto(null, new Ponto4D(0.3, 0.3));
       ponto.PrimitivaTamanho = 10;
       ponto.ObjetoAtualizar();
       ObjetoNovo(ponto);
@@ -157,6 +154,21 @@ namespace gcgcg
       }
     }
 
+    private bool verifyIsInside(){
+      double maximo = Math.Pow(circuloMaior.PontosId(18).X - 0.3, 2) + Math.Pow(circuloMaior.PontosId(18).Y - 0.3, 2);
+      maximo-=0.007;
+      if (maximo < 0){
+        maximo*=(-1);
+      }
+      double distancia = Math.Pow(objetoSelecionado.PontosId(0).X - 0.3, 2) + Math.Pow(objetoSelecionado.PontosId(0).Y - 0.3, 2);
+      
+      if (distancia >= maximo){
+        return false;
+      }
+      return true;
+      
+    }
+
     protected override void OnRenderFrame(FrameEventArgs e)
     {
       base.OnRenderFrame(e);
@@ -196,7 +208,7 @@ namespace gcgcg
             Console.WriteLine(objetoSelecionado);
           }
           else {
-            if (input.IsKeyPressed(Keys.C)){
+            if (input.IsKeyPressed(Keys.C) && verifyIsInside()){
               Ponto4D pto, pto1;
               pto = new Ponto4D(objetoSelecionado.PontosId(0).X, objetoSelecionado.PontosId(0).Y + 0.05f);
               objetoSelecionado.PontosAlterar(pto, 0);
@@ -211,7 +223,7 @@ namespace gcgcg
                 contador++;
               }
             }
-            else if (input.IsKeyPressed(Keys.B)){
+            else if (input.IsKeyPressed(Keys.B) && verifyIsInside()){
               Ponto4D pto, pto1;
               pto = new Ponto4D(objetoSelecionado.PontosId(0).X, objetoSelecionado.PontosId(0).Y - 0.05f);
               objetoSelecionado.PontosAlterar(pto, 0);
@@ -226,7 +238,7 @@ namespace gcgcg
                 contador++;
               }
             }
-            else if (input.IsKeyPressed(Keys.E)){
+            else if (input.IsKeyPressed(Keys.E) && verifyIsInside()){
               Ponto4D pto, pto1;
               pto = new Ponto4D(objetoSelecionado.PontosId(0).X - 0.05f, objetoSelecionado.PontosId(0).Y);
               objetoSelecionado.PontosAlterar(pto, 0);
@@ -241,7 +253,7 @@ namespace gcgcg
                 contador++;
               }
             }
-            else if (input.IsKeyPressed(Keys.D)){
+            else if (input.IsKeyPressed(Keys.D) && verifyIsInside()){
               Ponto4D pto, pto1;
               pto = new Ponto4D(objetoSelecionado.PontosId(0).X + 0.05f, objetoSelecionado.PontosId(0).Y);
               objetoSelecionado.PontosAlterar(pto, 0);
