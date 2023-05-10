@@ -20,6 +20,8 @@ namespace gcgcg
   {
     private List<Objeto> objetosLista = new List<Objeto>();
     private Objeto objetoSelecionado, circuloMaior, circulo, retangulo = null;
+    private double maximo;
+
     private char rotulo = '@';
 
     private readonly float[] _sruEixos =
@@ -154,15 +156,17 @@ namespace gcgcg
       }
     }
 
-    private bool verifyIsInside(){
-      double maximo = Math.Pow(circuloMaior.PontosId(18).X - 0.3, 2) + Math.Pow(circuloMaior.PontosId(18).Y - 0.3, 2);
-      maximo-=0.007;
+
+    private bool verifyIsInside(Ponto4D pto){
+      maximo = Math.Pow(circuloMaior.PontosId(18).X - 0.3, 2) + Math.Pow(circuloMaior.PontosId(18).Y - 0.3, 2);
+
+      maximo-=0.01;
       if (maximo < 0){
         maximo*=(-1);
       }
-      double distancia = Math.Pow(objetoSelecionado.PontosId(0).X - 0.3, 2) + Math.Pow(objetoSelecionado.PontosId(0).Y - 0.3, 2);
+      double distancia = Math.Pow(pto.X - 0.3, 2) + Math.Pow(pto.Y - 0.3, 2);
       
-      if (distancia >= maximo){
+      if (distancia >= maximo + 0.02){
         return false;
       }
       return true;
@@ -208,64 +212,72 @@ namespace gcgcg
             Console.WriteLine(objetoSelecionado);
           }
           else {
-            if (input.IsKeyPressed(Keys.C) && verifyIsInside()){
+            if (input.IsKeyPressed(Keys.C)){
               Ponto4D pto, pto1;
               pto = new Ponto4D(objetoSelecionado.PontosId(0).X, objetoSelecionado.PontosId(0).Y + 0.05f);
-              objetoSelecionado.PontosAlterar(pto, 0);
-              objetoSelecionado.ObjetoAtualizar();
-              verifyCollision();
-              int contador = 0;
-              for (int i = 0; i<360; i+=5){
-                pto = circulo.PontosId(contador);
-                pto1 = new Ponto4D(pto.X, pto.Y + 0.05f);
-                circulo.PontosAlterar(pto1, contador);
-                circulo.ObjetoAtualizar();
-                contador++;
+              if (verifyIsInside(pto)){
+                objetoSelecionado.PontosAlterar(pto, 0);
+                objetoSelecionado.ObjetoAtualizar();
+                verifyCollision();
+                int contador = 0;
+                for (int i = 0; i<360; i+=5){
+                  pto = circulo.PontosId(contador);
+                  pto1 = new Ponto4D(pto.X, pto.Y + 0.05f);
+                  circulo.PontosAlterar(pto1, contador);
+                  circulo.ObjetoAtualizar();
+                  contador++;
+                }
               }
             }
-            else if (input.IsKeyPressed(Keys.B) && verifyIsInside()){
+            else if (input.IsKeyPressed(Keys.B)){
               Ponto4D pto, pto1;
               pto = new Ponto4D(objetoSelecionado.PontosId(0).X, objetoSelecionado.PontosId(0).Y - 0.05f);
-              objetoSelecionado.PontosAlterar(pto, 0);
-              objetoSelecionado.ObjetoAtualizar();
-              verifyCollision();
-              int contador = 0;
-              for (int i = 0; i<360; i+=5){
-                pto = circulo.PontosId(contador);
-                pto1 = new Ponto4D(pto.X, pto.Y - 0.05f);
-                circulo.PontosAlterar(pto1, contador);
-                circulo.ObjetoAtualizar();
-                contador++;
+              if (verifyIsInside(pto)){
+                objetoSelecionado.PontosAlterar(pto, 0);
+                objetoSelecionado.ObjetoAtualizar();
+                verifyCollision();
+                int contador = 0;
+                for (int i = 0; i<360; i+=5){
+                  pto = circulo.PontosId(contador);
+                  pto1 = new Ponto4D(pto.X, pto.Y - 0.05f);
+                  circulo.PontosAlterar(pto1, contador);
+                  circulo.ObjetoAtualizar();
+                  contador++;
+                }
               }
             }
-            else if (input.IsKeyPressed(Keys.E) && verifyIsInside()){
+            else if (input.IsKeyPressed(Keys.E)){
               Ponto4D pto, pto1;
               pto = new Ponto4D(objetoSelecionado.PontosId(0).X - 0.05f, objetoSelecionado.PontosId(0).Y);
-              objetoSelecionado.PontosAlterar(pto, 0);
-              objetoSelecionado.ObjetoAtualizar();
-              verifyCollision();
-              int contador = 0;
-              for (int i = 0; i<360; i+=5){
-                pto = circulo.PontosId(contador);
-                pto1 = new Ponto4D(pto.X - 0.05f, pto.Y);
-                circulo.PontosAlterar(pto1, contador);
-                circulo.ObjetoAtualizar();
-                contador++;
+              if (verifyIsInside(pto)){
+                objetoSelecionado.PontosAlterar(pto, 0);
+                objetoSelecionado.ObjetoAtualizar();
+                verifyCollision();
+                int contador = 0;
+                for (int i = 0; i<360; i+=5){
+                  pto = circulo.PontosId(contador);
+                  pto1 = new Ponto4D(pto.X - 0.05f, pto.Y);
+                  circulo.PontosAlterar(pto1, contador);
+                  circulo.ObjetoAtualizar();
+                  contador++;
+                }
               }
             }
-            else if (input.IsKeyPressed(Keys.D) && verifyIsInside()){
+            else if (input.IsKeyPressed(Keys.D)){
               Ponto4D pto, pto1;
               pto = new Ponto4D(objetoSelecionado.PontosId(0).X + 0.05f, objetoSelecionado.PontosId(0).Y);
-              objetoSelecionado.PontosAlterar(pto, 0);
-              objetoSelecionado.ObjetoAtualizar();
-              verifyCollision();
-              int contador = 0;
-              for (int i = 0; i<360; i+=5){
-                pto = circulo.PontosId(contador);
-                pto1 = new Ponto4D(pto.X + 0.05f, pto.Y);
-                circulo.PontosAlterar(pto1, contador);
-                circulo.ObjetoAtualizar();
-                contador++;
+              if (verifyIsInside(pto)){
+                objetoSelecionado.PontosAlterar(pto, 0);
+                objetoSelecionado.ObjetoAtualizar();
+                verifyCollision();
+                int contador = 0;
+                for (int i = 0; i<360; i+=5){
+                  pto = circulo.PontosId(contador);
+                  pto1 = new Ponto4D(pto.X + 0.05f, pto.Y);
+                  circulo.PontosAlterar(pto1, contador);
+                  circulo.ObjetoAtualizar();
+                  contador++;
+                }
               }
             }
             else
