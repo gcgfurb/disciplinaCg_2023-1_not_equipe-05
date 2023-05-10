@@ -146,6 +146,10 @@ namespace gcgcg
       ObjetoNovo(p2);
       ObjetoNovo(p3);
       ObjetoNovo(p4);
+      p1.shaderCor = _shaderVermelha;
+
+      //spline = new Spline(null, ptoA, ptoB, ptoC, ptoD, 4)
+
 
       s1 = new SegReta(null, p1.PontosId(0), p2.PontosId(0));
       s2 = new SegReta(null, p2.PontosId(0), p3.PontosId(0));
@@ -211,7 +215,6 @@ namespace gcgcg
 
       #region Teclado
       var input = KeyboardState;
-      objetoSelecionado.shaderCor = _shaderVermelha;
       if (input.IsKeyDown(Keys.Escape))
       {
         Close();
