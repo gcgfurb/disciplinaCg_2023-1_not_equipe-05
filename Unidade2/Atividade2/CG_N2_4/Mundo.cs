@@ -21,7 +21,7 @@ namespace gcgcg
     private List<Objeto> objetosLista = new List<Objeto>();
     private Objeto objetoSelecionado = null;
     private List<Objeto> retaSelecionada = null;
-    private Objeto p1, p2, p3, p4, s1, s2, s3;
+    private Objeto p1, p2, p3, p4, s1, s2, s3, spline;
     private int contador, tamanhoLista = 0;
     private char rotulo = '@';
 
@@ -148,8 +148,9 @@ namespace gcgcg
       ObjetoNovo(p4);
       p1.shaderCor = _shaderVermelha;
 
-      //spline = new Spline(null, ptoA, ptoB, ptoC, ptoD, 4)
-
+      spline = new Spline(null, new Ponto4D(-0.5, -0.5), new Ponto4D(-0.5, 0.5), new Ponto4D(0.5, 0.5), new Ponto4D(0.5, -0.5), 4);
+      ObjetoNovo(spline);
+      objetoSelecionado.shaderCor = new Shader("Shaders/shader.vert", "Shaders/shaderAmarela.frag");
 
       s1 = new SegReta(null, p1.PontosId(0), p2.PontosId(0));
       s2 = new SegReta(null, p2.PontosId(0), p3.PontosId(0));
