@@ -21,8 +21,10 @@ namespace gcgcg
     private List<Objeto> objetosLista = new List<Objeto>();
     private Objeto objetoSelecionado = null;
     private List<Objeto> retaSelecionada = null;
-    private Objeto p1, p2, p3, p4, s1, s2, s3, spline;
+    private List<Objeto> ptosControle = new List<Objeto>();
+    private Objeto pontoA, pontoB, pontoC, pontoD, p1, p2, p3, p4, s1, s2, s3, spline;
     private int contador, tamanhoLista = 0;
+    private int qntPtos = 10;
     private char rotulo = '@';
 
     private readonly float[] _sruEixos =
@@ -93,6 +95,7 @@ namespace gcgcg
           break;
       }
     }
+
     protected override void OnLoad()
     {
       base.OnLoad();
@@ -148,9 +151,21 @@ namespace gcgcg
       ObjetoNovo(p4);
       p1.shaderCor = _shaderVermelha;
 
-      spline = new Spline(null, new Ponto4D(-0.5, -0.5), new Ponto4D(-0.5, 0.5), new Ponto4D(0.5, 0.5), new Ponto4D(0.5, -0.5), 4);
+      ptosControle.Add(p1);
+      ptosControle.Add(p2);
+      ptosControle.Add(p3);
+      ptosControle.Add(p4);
+
+      spline = new Spline(null, new Ponto4D(-0.5, -0.5), new Ponto4D(-0.5, 0.5), new Ponto4D(0.5, 0.5), new Ponto4D(0.5, -0.5), qntPtos);
       ObjetoNovo(spline);
       objetoSelecionado.shaderCor = new Shader("Shaders/shader.vert", "Shaders/shaderAmarela.frag");
+      foreach(Ponto4D pto in spline.ptosSpline){
+        int i = spline.ptosSpline.IndexOf(pto); 
+        if (i < spline.ptosSpline.Length-1){
+            ObjetoNovo(new SegReta(null, pto, spline.ptosSpline[i + 1]));
+        }
+      }
+      objetoNovo = new SegReta(null, spline.ptos.Last(), ptosControle[3]);
 
       s1 = new SegReta(null, p1.PontosId(0), p2.PontosId(0));
       s2 = new SegReta(null, p2.PontosId(0), p3.PontosId(0));
