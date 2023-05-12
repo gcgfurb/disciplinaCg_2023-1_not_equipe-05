@@ -5,6 +5,7 @@
 using CG_Biblioteca;
 using OpenTK.Graphics.OpenGL4;
 using System.Collections.Generic;
+using System;
 
 namespace gcgcg
 {
@@ -14,7 +15,7 @@ namespace gcgcg
     protected char rotulo;
     public char Rotulo { get => rotulo; set => rotulo = value; }
     protected Objeto paiRef;
-    // public Objeto PaiRef { get => paiRef; }
+    public Objeto PaiRef { get => paiRef; }
     private List<Objeto> objetosLista = new List<Objeto>();
     private PrimitiveType primitivaTipo = PrimitiveType.LineLoop;
     public PrimitiveType PrimitivaTipo { get => primitivaTipo; set => primitivaTipo = value; }
@@ -34,6 +35,20 @@ namespace gcgcg
       this.paiRef = paiRef;
     }
 
+    public List<Objeto> GetObjetosLista(){
+      return objetosLista;
+    }
+
+    public List<Objeto> GetObjetosLista(Type t){
+      List<Objeto> temp = new List<Objeto>();
+      foreach (Objeto obj in GetObjetosLista()) {
+        if (obj.GetType() == t) {
+          temp.Add(obj);
+        }
+      }
+
+      return temp;
+    }
     public void ObjetoAtualizar()
     {
       float[] vertices = new float[pontosLista.Count * 3];
@@ -55,7 +70,7 @@ namespace gcgcg
       GL.EnableVertexAttribArray(0);
     }
 
-    public void Desenhar()
+    public virtual void Desenhar()
     {
 #if CG_OpenGL && !CG_DirectX
       GL.PointSize(primitivaTamanho);
@@ -78,82 +93,38 @@ namespace gcgcg
       this.objetosLista.Add(filho);
     }
 
-    // public void FilhoRemover(Objeto filho)
-    // {
-    //   this.objetosLista.Remove(filho);
-    // }
+    public void FilhoRemover(Objeto filho)
+    {
+      this.objetosLista.Remove(filho);
+    }
 
-    // public void GrafocenaRemover()
-    // {
-    //   for (var i = 0; i < objetosLista.Count; i++)
-    //   {
-    //     objetosLista[i].GrafocenaRemover();
-    //   }
-    //   objetosLista.Clear();
-    // }
-
-    // public void GrafocenaToString()
-    // {
-    //   Console.WriteLine(this);
-    //   for (var i = 0; i < objetosLista.Count; i++)
-    //   {
-    //     Console.WriteLine(objetosLista[i]);
-    //   }
-    // }
-
-    // public bool GrafocenaRemoverPoligonoVazio()
-    // {
-    //   for (var i = 0; i < objetosLista.Count; i++)
-    //   {
-    //     if (objetosLista[i].GrafocenaRemoverPoligonoVazio())
-    //     {
-    //       objetosLista.RemoveAt(i);
-    //     }
-    //   }
-    //   if (PontosVazio())
-    //   {
-    //     return true;
-    //   }
-    //   return false;
-    // }
-
-    // public void PrimitivaTipoTroca()
-    // {
-    //   if (primitivaTipo == PrimitiveType.LineLoop)
-    //     primitivaTipo = PrimitiveType.LineStrip;
-    //   else
-    //     primitivaTipo = PrimitiveType.LineLoop;
-    // }
 
     public void PontosAdicionar(Ponto4D pto)
     {
       pontosLista.Add(pto);
     }
 
-    // public void PontosRemoverUltimo()
-    // {
-    //   pontosLista.RemoveAt(pontosLista.Count - 1);
-    // }
+    public List<Ponto4D> GetPontos() {
+      return pontosLista;
+    }
 
-    // protected bool PontosVazio()
-    // {
-    //   if (pontosLista.Count == 0)
-    //   {
-    //     return true;
-    //   }
-    //   return false;
-    // }
 
     public Ponto4D PontosId(int id)
     {
       return pontosLista[id];
     }
 
-    // public Ponto4D PontosUltimo()
-    // {
-    //   return pontosLista[pontosLista.Count - 1];
-    // }
+    public void PontosLimpar(){
+      pontosLista.Clear();
+    }
 
+    public void PontosRemover(int pos) {
+      pontosLista.RemoveAt(pos);
+    }
+
+    public void PontosRemover(Ponto4D pto) {
+      pontosLista.Remove(pto);
+    }
     public void PontosAlterar(Ponto4D pto, int posicao)
     {
       pontosLista[posicao] = pto;

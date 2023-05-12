@@ -8,8 +8,7 @@ namespace gcgcg
 {
   internal class Spline : Objeto
   {
-    public int qntPtos;
-    public List<Ponto4D> ptosSpline = new List<Ponto4D>();
+    private int qntPtos;
 
     public Spline(Objeto paiRef, Ponto4D ptoA, Ponto4D ptoB, Ponto4D ptoC, Ponto4D ptoD, int qntPtos) : base(paiRef)
     {
@@ -22,16 +21,19 @@ namespace gcgcg
       this.qntPtos = qntPtos;
 
       Atualizar();
-      DrawSpline();
+      Desenhar();
     }
     public void Atualizar()
     {
-
       base.ObjetoAtualizar();
     }
 
-    public void DrawSpline()
-    {
+    public void SetQntPontos(int qnt) {
+      this.qntPtos = qnt;
+    }
+    public override void Desenhar(){
+      List<Ponto4D> temp = new List<Ponto4D>();
+      
       for (int i = 0; i < qntPtos; i++){
         double p = (double)i/(double)qntPtos;
 
@@ -42,8 +44,16 @@ namespace gcgcg
         Ponto4D ptoY = Calcular(ptoBC, ptoCD, p);
         Ponto4D resultado = Calcular(ptoX, ptoY, p);
         Atualizar();
-        ptosSpline.Add(resultado);
+        temp.Add(resultado);
       }
+
+      base.PontosLimpar();
+
+      foreach (Ponto4D pto in temp){
+        base.PontosAdicionar(pto);
+      }
+
+      base.Desenhar();
     }
 
     private Ponto4D Calcular(Ponto4D pto, Ponto4D pto1, double p)
