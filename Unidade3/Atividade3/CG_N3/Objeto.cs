@@ -74,18 +74,25 @@ namespace gcgcg
 
     public bool VerificarInterseccao(Ponto4D pto)
     {
-      return CalcularInterseccao(pto)%2 != 0;
+      return CalcularInterseccao(pto) % 2 != 0;
     }
 
     private int CalcularInterseccao(Ponto4D pto)
     {
       int count = 0;
-      for (int i = 0; i < pontosLista.Count; i++){
-        if (i+1 < pontosLista.Count){
-          double t = (pto.Y - pontosLista[i].Y) / (pontosLista[i+1].Y - pontosLista[i].Y);
-          if (t <= 1 && t >= 0){
-            double x = pontosLista[i].X + (pontosLista[i+1].X - pontosLista[i].X)*t;
-            if (x > pto.X){
+      for (int i = 0; i < pontosLista.Count - 1; i++)
+      {
+        double numerador = pto.Y - pontosLista[i].Y;
+        double denominador = pontosLista[i + 1].Y - pontosLista[i].Y;
+        if (denominador != 0)
+        {
+          double t = numerador / denominador;
+
+          if (t >= 0 && t <= 1)
+          {
+            double x = pontosLista[i].X + (pontosLista[i + 1].X - pontosLista[i].X) * t;
+            if (x > pto.X)
+            {
               count++;
             }
           }
@@ -118,7 +125,7 @@ namespace gcgcg
       GL.EnableVertexAttribArray(0);
     }
 
-// FIXME: falta para Transformações Geométricas PushMatrix e PopMatrix - Grafo de Cena
+    // FIXME: falta para Transformações Geométricas PushMatrix e PopMatrix - Grafo de Cena
     public void Desenhar()
     {
 #if CG_OpenGL && !CG_DirectX

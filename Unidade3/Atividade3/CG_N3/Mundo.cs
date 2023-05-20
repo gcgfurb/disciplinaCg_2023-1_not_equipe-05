@@ -102,15 +102,15 @@ namespace gcgcg
       #region Objeto: ponto  
       Objeto p1 = new Ponto(mundo, ref rotuloAtual, new Ponto4D(-0.25, -0.25));
       p1.PrimitivaTipo = PrimitiveType.Points;
-      p1.PrimitivaTamanho = 5; // FIXME: não está mudando o tamanho
+      p1.PrimitivaTamanho = 5;
 
       Objeto p2 = new Ponto(mundo, ref rotuloAtual, new Ponto4D(0.5, 0.65));
       p2.PrimitivaTipo = PrimitiveType.Points;
-      p2.PrimitivaTamanho = 5; // FIXME: não está mudando o tamanho
+      p2.PrimitivaTamanho = 5;
 
       Objeto p3 = new Ponto(mundo, ref rotuloAtual, new Ponto4D(0.4, 0.4));
       p3.PrimitivaTipo = PrimitiveType.Points;
-      p3.PrimitivaTamanho = 5; // FIXME: não está mudando o tamanho
+      p3.PrimitivaTamanho = 5;
       #endregion
 
       List<Ponto4D> pontosPoligono = new List<Ponto4D>();
@@ -122,13 +122,13 @@ namespace gcgcg
       objetoSelecionado = new Poligono(mundo, ref rotuloAtual, pontosPoligono);
 
       if (objetoSelecionado.VerificarInterseccao(p1.PontosId(0))){
-        p1.PrimitivaTamanho = 1;
+        p1.PrimitivaTamanho = 20;
       }
       else if (objetoSelecionado.VerificarInterseccao(p2.PontosId(0))){
-        p2.PrimitivaTamanho = 1;
+        p2.PrimitivaTamanho = 20;
       }
       else if (objetoSelecionado.VerificarInterseccao(p3.PontosId(0))){
-        p3.PrimitivaTamanho = 1;
+        p3.PrimitivaTamanho = 20;
       }
 
 #if CG_Privado
