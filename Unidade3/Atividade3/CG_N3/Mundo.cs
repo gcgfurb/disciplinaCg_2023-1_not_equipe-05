@@ -21,6 +21,8 @@ namespace gcgcg
     Objeto mundo;
     private char rotuloAtual = '?';
     private Objeto objetoSelecionado = null;
+    private List<Objeto> objetosLista = new List<Objeto>();
+    private int count = 0;
 
     private readonly float[] _sruEixos =
     {
@@ -111,6 +113,11 @@ namespace gcgcg
       Objeto p3 = new Ponto(mundo, ref rotuloAtual, new Ponto4D(0.4, 0.4));
       p3.PrimitivaTipo = PrimitiveType.Points;
       p3.PrimitivaTamanho = 5;
+
+      objetosLista.Add(p1);
+      objetosLista.Add(p2);
+      objetosLista.Add(p3);
+      count+=2;
       #endregion
 
       List<Ponto4D> pontosPoligono = new List<Ponto4D>();
@@ -119,7 +126,10 @@ namespace gcgcg
       pontosPoligono.Add(new Ponto4D(0.75, 0.75));
       pontosPoligono.Add(new Ponto4D(0.50, 0.50));
       pontosPoligono.Add(new Ponto4D(0.25, 0.75));
-      objetoSelecionado = new Poligono(mundo, ref rotuloAtual, pontosPoligono);
+      Objeto poli = new Poligono(mundo, ref rotuloAtual, pontosPoligono);
+      objetosLista.Add(poli);
+      count+=1;
+      objetoSelecionado = poli;
 
       if (objetoSelecionado.VerificarInterseccao(p1.PontosId(0))){
         p1.PrimitivaTamanho = 20;
@@ -151,6 +161,8 @@ namespace gcgcg
     protected override void OnRenderFrame(FrameEventArgs e)
     {
       base.OnRenderFrame(e);
+      // double x = base.MousePosition.X;
+      // double y = base.MousePosition.Y;
 
       GL.Clear(ClearBufferMask.ColorBufferBit);
 
@@ -178,69 +190,92 @@ namespace gcgcg
         {
           mundo.GrafocenaImprimir("");
         }
-        else
-        {
-          if (input.IsKeyPressed(Keys.P))
-          {
-            System.Console.WriteLine(objetoSelecionado.ToString());
+        else{
+          if (input.IsKeyPressed(Keys.O)){
+            Objeto objeto = new Retangulo(mundo, ref rotuloAtual, new Ponto4D(-0.25, 0.25), new Ponto4D(-0.75, 0.75));
+            objeto.PrimitivaTipo = PrimitiveType.LineLoop;
+            objetosLista.Add(objeto);
+            objetoSelecionado = objeto;
+            count+=1;
           }
-          else
-          {
-            if (input.IsKeyPressed(Keys.M))
-              objetoSelecionado.MatrizImprimir();
+          else{
+            if (input.IsKeyPressed(Keys.R)){
+              // ele some da tela
+              if (objetosLista.Count > 0){
+                objetoSelecionado.PrimitivaTipo = PrimitiveType.TrianglesAdjacency;
+                objetosLista.RemoveAt(count);
+                Objeto[] array = objetosLista.ToArray();
+                count-=1;
+                if (count > 0){
+                  objetoSelecionado = array[array.Length - 1];
+                }
+              }
+            }
             else
             {
-              //TODO: não está atualizando a BBox com as transformações geométricas
-              if (input.IsKeyPressed(Keys.I))
-                objetoSelecionado.MatrizAtribuirIdentidade();
+              if (input.IsKeyPressed(Keys.P))
+              {
+                System.Console.WriteLine(objetoSelecionado.ToString());
+              }
               else
               {
-                if (input.IsKeyPressed(Keys.Left))
-                  objetoSelecionado.MatrizTranslacaoXYZ(-0.05, 0, 0);
+                if (input.IsKeyPressed(Keys.M))
+                  objetoSelecionado.MatrizImprimir();
                 else
                 {
-                  if (input.IsKeyPressed(Keys.Right))
-                    objetoSelecionado.MatrizTranslacaoXYZ(0.05, 0, 0);
+                  //TODO: não está atualizando a BBox com as transformações geométricas
+                  if (input.IsKeyPressed(Keys.I))
+                    objetoSelecionado.MatrizAtribuirIdentidade();
                   else
                   {
-                    if (input.IsKeyPressed(Keys.Up))
-                      objetoSelecionado.MatrizTranslacaoXYZ(0, 0.05, 0);
+                    if (input.IsKeyPressed(Keys.Left))
+                      objetoSelecionado.MatrizTranslacaoXYZ(-0.05, 0, 0);
                     else
                     {
-                      if (input.IsKeyPressed(Keys.Down))
-                        objetoSelecionado.MatrizTranslacaoXYZ(0, -0.05, 0);
+                      if (input.IsKeyPressed(Keys.Right))
+                        objetoSelecionado.MatrizTranslacaoXYZ(0.05, 0, 0);
                       else
                       {
-                        if (input.IsKeyPressed(Keys.PageUp))
-                          objetoSelecionado.MatrizEscalaXYZ(2, 2, 2);
+                        if (input.IsKeyPressed(Keys.Up))
+                          objetoSelecionado.MatrizTranslacaoXYZ(0, 0.05, 0);
                         else
                         {
-                          if (input.IsKeyPressed(Keys.PageDown))
-                            objetoSelecionado.MatrizEscalaXYZ(0.5, 0.5, 0.5);
+                          if (input.IsKeyPressed(Keys.Down))
+                            objetoSelecionado.MatrizTranslacaoXYZ(0, -0.05, 0);
                           else
                           {
-                            if (input.IsKeyPressed(Keys.Home))
-                              objetoSelecionado.MatrizEscalaXYZBBox(0.5, 0.5, 0.5);
+                            if (input.IsKeyPressed(Keys.PageUp))
+                              objetoSelecionado.MatrizEscalaXYZ(2, 2, 2);
                             else
                             {
-                              if (input.IsKeyPressed(Keys.End))
-                                objetoSelecionado.MatrizEscalaXYZBBox(2, 2, 2);
+                              if (input.IsKeyPressed(Keys.PageDown))
+                                objetoSelecionado.MatrizEscalaXYZ(0.5, 0.5, 0.5);
                               else
                               {
-                                if (input.IsKeyPressed(Keys.D1))
-                                  objetoSelecionado.MatrizRotacao(10);
+                                if (input.IsKeyPressed(Keys.Home))
+                                  objetoSelecionado.MatrizEscalaXYZBBox(0.5, 0.5, 0.5);
                                 else
                                 {
-                                  if (input.IsKeyPressed(Keys.D2))
-                                    objetoSelecionado.MatrizRotacao(-10);
+                                  if (input.IsKeyPressed(Keys.End))
+                                    objetoSelecionado.MatrizEscalaXYZBBox(2, 2, 2);
                                   else
                                   {
-                                    if (input.IsKeyPressed(Keys.D3))
-                                      objetoSelecionado.MatrizRotacaoZBBox(10);
+                                    if (input.IsKeyPressed(Keys.D1))
+                                      objetoSelecionado.MatrizRotacao(10);
                                     else
                                     {
-                                      if (input.IsKeyPressed(Keys.D4))
-                                        objetoSelecionado.MatrizRotacaoZBBox(-10);
+                                      if (input.IsKeyPressed(Keys.D2))
+                                        objetoSelecionado.MatrizRotacao(-10);
+                                      else
+                                      {
+                                        if (input.IsKeyPressed(Keys.D3))
+                                          objetoSelecionado.MatrizRotacaoZBBox(10);
+                                        else
+                                        {
+                                          if (input.IsKeyPressed(Keys.D4))
+                                            objetoSelecionado.MatrizRotacaoZBBox(-10);
+                                        }
+                                      }
                                     }
                                   }
                                 }
@@ -256,7 +291,7 @@ namespace gcgcg
             }
           }
         }
-      }
+       }
       #endregion
 
       #region  Mouse
