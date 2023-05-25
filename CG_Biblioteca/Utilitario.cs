@@ -4,7 +4,7 @@ namespace gcgcg
 {
   public abstract class Utilitario
   {
-    public static char charProximo(char atual) {
+    public static char CharProximo(char atual) {
       return Convert.ToChar(atual + 1);
     }
     public static void AjudaTeclado()

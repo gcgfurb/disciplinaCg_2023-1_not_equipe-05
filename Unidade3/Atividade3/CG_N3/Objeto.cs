@@ -53,7 +53,7 @@ namespace gcgcg
     public Objeto(Objeto paiRef, ref char _rotulo, Objeto objetoFilho = null)
     {
       this.paiRef = paiRef;
-      rotulo = _rotulo = Utilitario.charProximo(_rotulo);
+      rotulo = _rotulo = Utilitario.CharProximo(_rotulo);
       if (paiRef != null)
       {
         ObjetoNovo(objetoFilho);
@@ -191,6 +191,18 @@ namespace gcgcg
       return null;
     }
 
+    public Objeto GrafocenaBuscaProximo(Objeto objetoAtual)
+    {
+      objetoAtual = GrafocenaBusca(Utilitario.CharProximo(objetoAtual.rotulo));
+      if (objetoAtual != null)
+      {
+        return objetoAtual;
+      }
+      else
+      {
+        return GrafocenaBusca(Utilitario.CharProximo('@'));
+      }
+    }
     public void GrafocenaImprimir(String idt)
     {
       System.Console.WriteLine(idt + rotulo);
