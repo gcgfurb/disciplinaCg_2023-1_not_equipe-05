@@ -155,6 +155,16 @@ namespace gcgcg
       this.objetosLista.Add(filho);
     }
 
+     public void FilhoRemover(Objeto filho)
+    {
+      if (filho.rotulo != '@') this.objetosLista.Remove(filho);
+    }
+
+    public bool EhVazio()
+    {
+      return this.objetosLista.Count == 0;
+    }
+
     public Ponto4D PontosId(int id)
     {
       return pontosLista[id];

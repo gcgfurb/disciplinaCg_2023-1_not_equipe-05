@@ -195,8 +195,8 @@ namespace gcgcg
         objeto.PrimitivaTipo = PrimitiveType.LineLoop;
         objetoSelecionado = mundo.GrafocenaBuscaProximo(objetoSelecionado);
       }
-      if (input.IsKeyPressed(Keys.V)){
-        objetoSelecionado.PrimitivaTipo = PrimitiveType.TrianglesAdjacency;
+      if (input.IsKeyPressed(Keys.D)){
+        mundo.FilhoRemover(objetoSelecionado);
         objetoSelecionado = mundo.GrafocenaBuscaProximo(objetoSelecionado);
       }
       if (input.IsKeyPressed(Keys.R))
@@ -241,6 +241,7 @@ namespace gcgcg
 
       #region  Mouse
       // ☞ cc6efca2-aba0-4a49-b49e-d8e937028d26
+      // q2 criar lista com os pontos do click e criar objt com essa lista e por primitiva de lineloop
       #endregion
 
     }}
