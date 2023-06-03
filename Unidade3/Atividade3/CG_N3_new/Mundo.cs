@@ -21,7 +21,10 @@ namespace gcgcg
     Objeto mundo;
     private char rotuloNovo = '?';
     private Objeto objetoSelecionado = null;
-    
+    private List<Ponto> listaPontos = new List<Ponto>();
+    private SegReta retaMouseTrace;
+    private bool mouseTrace = false;
+
     private readonly float[] _sruEixos =
     {
       -0.5f,  0.0f,  0.0f, /* X- */      0.5f,  0.0f,  0.0f, /* X+ */
@@ -32,10 +35,12 @@ namespace gcgcg
     private int _vertexBufferObject_sruEixos;
     private int _vertexArrayObject_sruEixos;
 
+    private Shader _shaderBranca;
     private Shader _shaderVermelha;
     private Shader _shaderVerde;
     private Shader _shaderAzul;
-    private Shader _shaderBranca;
+    private Shader _shaderCiano;
+    private Shader _shaderMagenta;
     private Shader _shaderAmarela;
 
     public Mundo(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings)
@@ -67,10 +72,9 @@ namespace gcgcg
       Console.WriteLine("__________________________________ \n");
     }
 
-
     protected override void OnLoad()
     {
-     base.OnLoad();
+      base.OnLoad();
 
       Diretivas();
 
@@ -81,6 +85,8 @@ namespace gcgcg
       _shaderVermelha = new Shader("Shaders/shader.vert", "Shaders/shaderVermelha.frag");
       _shaderVerde = new Shader("Shaders/shader.vert", "Shaders/shaderVerde.frag");
       _shaderAzul = new Shader("Shaders/shader.vert", "Shaders/shaderAzul.frag");
+      _shaderCiano = new Shader("Shaders/shader.vert", "Shaders/shaderCiano.frag");
+      _shaderMagenta = new Shader("Shaders/shader.vert", "Shaders/shaderMagenta.frag");
       _shaderAmarela = new Shader("Shaders/shader.vert", "Shaders/shaderAmarela.frag");
       #endregion
 
@@ -150,8 +156,6 @@ namespace gcgcg
     protected override void OnRenderFrame(FrameEventArgs e)
     {
       base.OnRenderFrame(e);
-      // double x = base.MousePosition.X;
-      // double y = base.MousePosition.Y;
 
       GL.Clear(ClearBufferMask.ColorBufferBit);
 
@@ -162,9 +166,22 @@ namespace gcgcg
       SwapBuffers();
     }
 
+    public double converteValorPonto(float coordenada, bool eixo){
+      // coordenada vem um valor entre 0 e 800, tem que converter pra -1 até 1
+      // eixo true = x, eixo false = y
+      float convertido;
+      float inc = 0.0025f;
+      if (eixo){
+        convertido = -1+(inc*coordenada);
+      } else {
+        convertido = +1-(inc*coordenada);
+      }
+      return convertido;
+    }
     protected override void OnUpdateFrame(FrameEventArgs e)
     {
       base.OnUpdateFrame(e);
+
       // ☞ 396c2670-8ce0-4aff-86da-0f58cd8dcfdc   TODO: forma otimizada para teclado.
       #region Teclado
       var input = KeyboardState;
@@ -178,25 +195,16 @@ namespace gcgcg
       }
       if (input.IsKeyPressed(Keys.F))
         mundo.GrafocenaImprimir("");
-      if (input.IsKeyPressed(Keys.O)){
-        Objeto objeto = new Retangulo(mundo, ref rotuloNovo, new Ponto4D(-0.25, 0.25), new Ponto4D(-0.75, 0.75));
-        objeto.PrimitivaTipo = PrimitiveType.LineLoop;
-        objetoSelecionado = mundo.GrafocenaBuscaProximo(objetoSelecionado);
-      }
-      if (input.IsKeyPressed(Keys.D)){
-        mundo.FilhoRemover(objetoSelecionado);
-        objetoSelecionado = mundo.GrafocenaBuscaProximo(objetoSelecionado);
-      }
+      if (input.IsKeyPressed(Keys.P) && objetoSelecionado != null)
+        System.Console.WriteLine(objetoSelecionado.ToString());
+      if (input.IsKeyPressed(Keys.M) && objetoSelecionado != null)
+        objetoSelecionado.MatrizImprimir();
       if (input.IsKeyPressed(Keys.R))
         objetoSelecionado.shaderCor = _shaderVermelha;
       if (input.IsKeyPressed(Keys.B))
         objetoSelecionado.shaderCor = _shaderAzul; 
       if (input.IsKeyPressed(Keys.G))
         objetoSelecionado.shaderCor = _shaderVerde;
-      if (input.IsKeyPressed(Keys.P) && objetoSelecionado != null)
-        System.Console.WriteLine(objetoSelecionado.ImprimeToString());
-      if (input.IsKeyPressed(Keys.M) && objetoSelecionado != null)
-        objetoSelecionado.MatrizImprimir();
       //TODO: não está atualizando a BBox com as transformações geométricas
       if (input.IsKeyPressed(Keys.I) && objetoSelecionado != null)
         objetoSelecionado.MatrizAtribuirIdentidade();
@@ -224,12 +232,9 @@ namespace gcgcg
         objetoSelecionado.MatrizRotacaoZBBox(10);
       if (input.IsKeyPressed(Keys.D4) && objetoSelecionado != null)
         objetoSelecionado.MatrizRotacaoZBBox(-10);
-     
       #endregion
 
       #region  Mouse
-      // ☞ cc6efca2-aba0-4a49-b49e-d8e937028d26
-      // q2 criar lista com os pontos do click e criar objt com essa lista e por primitiva de lineloop
 
       if (MouseState.IsButtonPressed(MouseButton.Left))
       {
@@ -237,6 +242,14 @@ namespace gcgcg
         System.Console.WriteLine("__ Valores do Espaço de Tela");
         System.Console.WriteLine("Vector2 mousePosition: " + MousePosition);
         System.Console.WriteLine("Vector2i windowSize: " + Size);
+        Ponto ponto = new Ponto(objetoSelecionado, ref rotuloNovo, new Ponto4D(converteValorPonto(MousePosition.X, true), converteValorPonto(MousePosition.Y, false)));
+        ponto.PrimitivaTipo = PrimitiveType.Points;
+        ponto.PrimitivaTamanho = 10;
+        ponto.MatrizImprimir();
+
+        listaPontos.Add(ponto);
+        
+
       }
       if (MouseState.IsButtonDown(MouseButton.Right) && objetoSelecionado != null)
       {
@@ -253,9 +266,34 @@ namespace gcgcg
       {
         System.Console.WriteLine("MouseState.IsButtonReleased(MouseButton.Right)");
       }
+        
+
+
+
+        
+      if (listaPontos.Count > 0) {
+        if (!mouseTrace) {
+                Ponto4D p1 = new Ponto4D(listaPontos[listaPontos.Count - 1].PontosId(0).X, listaPontos[listaPontos.Count - 1].PontosId(0).Y);
+                Ponto4D p2 = new Ponto4D(new Ponto4D(converteValorPonto(MousePosition.X, true), converteValorPonto(MousePosition.Y, false)));
+
+                retaMouseTrace = new SegReta(objetoSelecionado, ref rotuloNovo, p1, p2);
+                mouseTrace = true;
+                //Lembrar de alterar o mouseTrace quando finalizar a criação do poligono
+              }
+              else {
+                Ponto4D p1 = new Ponto4D(listaPontos[listaPontos.Count - 1].PontosId(0).X, listaPontos[listaPontos.Count - 1].PontosId(0).Y);
+                Ponto4D p2 = new Ponto4D(new Ponto4D(converteValorPonto(MousePosition.X, true), converteValorPonto(MousePosition.Y, false)));
+                retaMouseTrace.PontosAlterar(p1, 0);
+                retaMouseTrace.PontosAlterar(p2, 1);
+                retaMouseTrace.ObjetoAtualizar();
+              }
+
+      }
+      
+    
       #endregion
 
-    }}
+    }
 
     protected override void OnResize(ResizeEventArgs e)
     {
@@ -275,15 +313,16 @@ namespace gcgcg
       GL.DeleteBuffer(_vertexBufferObject_sruEixos);
       GL.DeleteVertexArray(_vertexArrayObject_sruEixos);
 
+      GL.DeleteProgram(_shaderBranca.Handle);
       GL.DeleteProgram(_shaderVermelha.Handle);
       GL.DeleteProgram(_shaderVerde.Handle);
       GL.DeleteProgram(_shaderAzul.Handle);
+      GL.DeleteProgram(_shaderCiano.Handle);
+      GL.DeleteProgram(_shaderMagenta.Handle);
       GL.DeleteProgram(_shaderAmarela.Handle);
-      GL.DeleteProgram(_shaderBranca.Handle);
 
       base.OnUnload();
     }
-
 
 #if CG_Gizmo
     private void Sru3D()

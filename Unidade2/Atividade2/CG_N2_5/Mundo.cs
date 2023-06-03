@@ -50,14 +50,14 @@ namespace gcgcg
       if (objetoFilho == null)
       {
         objetosLista.Add(objeto);
-        objeto.Rotulo = rotulo = Utilitario.charProximo(rotulo);
+        objeto.Rotulo = rotulo = Utilitario.CharProximo(rotulo);
         objeto.ObjetoAtualizar();
         objetoSelecionado = objeto;
       }
       else
       {
         objeto.FilhoAdicionar(objetoFilho);
-        objetoFilho.Rotulo = rotulo = Utilitario.charProximo(rotulo);
+        objetoFilho.Rotulo = rotulo = Utilitario.CharProximo(rotulo);
         objetoFilho.ObjetoAtualizar();
         objetoSelecionado = objetoFilho;
       }

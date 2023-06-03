@@ -10,7 +10,7 @@ using OpenTK.Mathematics;
 
 namespace gcgcg
 {
-  internal class Objeto
+  internal class Objeto  // TODO: deveria ser uma class abstract ..??
   {
     // Objeto
     private readonly char rotulo;
@@ -31,7 +31,7 @@ namespace gcgcg
 
     // BBox do objeto
     private BBox bBox = new BBox();
-    public BBox Bbox()  // FIXME: readonly
+    public BBox Bbox()  // TODO: readonly
     {
       return bBox;
     }
@@ -47,8 +47,6 @@ namespace gcgcg
     private static Transformacao4D matrizGlobal = new Transformacao4D();
     private char eixoRotacao = 'z';
     public void TrocaEixoRotacao(char eixo) => eixoRotacao = eixo;
-
-    public int index1 = 0, index2 = 1;
 
 
     public Objeto(Objeto paiRef, ref char _rotulo, Objeto objetoFilho = null)
@@ -70,6 +68,55 @@ namespace gcgcg
       else
       {
         paiRef.FilhoAdicionar(objetoFilho);
+      }
+    }
+
+    public void ObjetoAtualizar()
+    {
+      float[] vertices = new float[pontosLista.Count * 3];
+      int ptoLista = 0;
+      for (int i = 0; i < vertices.Length; i += 3)
+      {
+        vertices[i] = (float)pontosLista[ptoLista].X;
+        vertices[i + 1] = (float)pontosLista[ptoLista].Y;
+        vertices[i + 2] = (float)pontosLista[ptoLista].Z;
+        ptoLista++;
+      }
+      bBox.Atualizar(pontosLista);
+
+      GL.PointSize(primitivaTamanho);
+
+      _vertexBufferObject = GL.GenBuffer();
+      GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
+      GL.BufferData(BufferTarget.ArrayBuffer, vertices.Length * sizeof(float), vertices, BufferUsageHint.StaticDraw);
+      _vertexArrayObject = GL.GenVertexArray();
+      GL.BindVertexArray(_vertexArrayObject);
+      GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
+      GL.EnableVertexAttribArray(0);
+    }
+
+    public void Desenhar(Transformacao4D matrizGrafo)
+    {
+#if CG_OpenGL && !CG_DirectX
+      GL.PointSize(primitivaTamanho);
+
+      GL.BindVertexArray(_vertexArrayObject);
+
+      if (paiRef != null)
+      {
+        matrizGrafo = matrizGrafo.MultiplicarMatriz(matriz);
+        _shaderObjeto.SetMatrix4("transform", matrizGrafo.ObterDadosOpenTK());
+        _shaderObjeto.Use();
+        GL.DrawArrays(primitivaTipo, 0, pontosLista.Count);
+#elif CG_DirectX && !CG_OpenGL
+      Console.WriteLine(" .. Coloque aqui o seu código em DirectX");
+#elif (CG_DirectX && CG_OpenGL) || (!CG_DirectX && !CG_OpenGL)
+      Console.WriteLine(" .. ERRO de Render - escolha OpenGL ou DirectX !!");
+#endif
+      }
+      for (var i = 0; i < objetosLista.Count; i++)
+      {
+        objetosLista[i].Desenhar(matrizGrafo);
       }
     }
 
@@ -102,72 +149,11 @@ namespace gcgcg
       return count;
     }
 
-    public void ObjetoAtualizar()
-    {
-      float[] vertices = new float[pontosLista.Count * 3];
-      int ptoLista = 0;
-      for (int i = 0; i < vertices.Length; i += 3)
-      {
-        vertices[i] = (float)pontosLista[ptoLista].X;
-        vertices[i + 1] = (float)pontosLista[ptoLista].Y;
-        vertices[i + 2] = (float)pontosLista[ptoLista].Z;
-        ptoLista++;
-      }
-      bBox.Atualizar(pontosLista);
-
-      GL.PointSize(primitivaTamanho);
-
-      _vertexBufferObject = GL.GenBuffer();
-      GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
-      GL.BufferData(BufferTarget.ArrayBuffer, vertices.Length * sizeof(float), vertices, BufferUsageHint.StaticDraw);
-      _vertexArrayObject = GL.GenVertexArray();
-      GL.BindVertexArray(_vertexArrayObject);
-      GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
-      GL.EnableVertexAttribArray(0);
-    }
-
-    // FIXME: falta para Transformações Geométricas PushMatrix e PopMatrix - Grafo de Cena
- public void Desenhar(Transformacao4D matrizGrafo)
-    {
-#if CG_OpenGL && !CG_DirectX
-      GL.PointSize(primitivaTamanho);
-
-      GL.BindVertexArray(_vertexArrayObject);
-
-      if (paiRef != null)
-      {
-        matrizGrafo = matrizGrafo.MultiplicarMatriz(matriz);
-        _shaderObjeto.SetMatrix4("transform", matrizGrafo.ObterDadosOpenTK());
-        _shaderObjeto.Use();
-        GL.DrawArrays(primitivaTipo, 0, pontosLista.Count);
-#elif CG_DirectX && !CG_OpenGL
-      Console.WriteLine(" .. Coloque aqui o seu código em DirectX");
-#elif (CG_DirectX && CG_OpenGL) || (!CG_DirectX && !CG_OpenGL)
-      Console.WriteLine(" .. ERRO de Render - escolha OpenGL ou DirectX !!");
-#endif
-      }
-      for (var i = 0; i < objetosLista.Count; i++)
-      {
-        objetosLista[i].Desenhar(matrizGrafo);
-      }
-    }
-
     #region Objeto: CRUD
-
 
     public void FilhoAdicionar(Objeto filho)
     {
       this.objetosLista.Add(filho);
-    }
-
-     public void FilhoRemover(Objeto filho)
-    {
-      if (filho.rotulo != '@') this.objetosLista.Remove(filho);
-    }
-
-    public bool EhVazio()
-    {
-      return this.objetosLista.Count == 0;
     }
 
     public Ponto4D PontosId(int id)
@@ -178,11 +164,23 @@ namespace gcgcg
     public void PontosAdicionar(Ponto4D pto)
     {
       pontosLista.Add(pto);
+      ObjetoAtualizar();
     }
+    public void FilhoRemover(Objeto filho)
+    {
+      if (filho.rotulo != '@') this.objetosLista.Remove(filho);
+    }
+
+    public bool EhVazio()
+    {
+      return this.objetosLista.Count == 0;
+    }
+
 
     public void PontosAlterar(Ponto4D pto, int posicao)
     {
       pontosLista[posicao] = pto;
+      ObjetoAtualizar();
     }
 
     #endregion
@@ -218,6 +216,7 @@ namespace gcgcg
         return GrafocenaBusca(Utilitario.CharProximo('@'));
       }
     }
+
     public void GrafocenaImprimir(String idt)
     {
       System.Console.WriteLine(idt + rotulo);
@@ -275,7 +274,7 @@ namespace gcgcg
     }
     public void MatrizRotacaoEixo(double angulo)
     {
-      switch (eixoRotacao)  // FIXME: ainda não uso no exemplo
+      switch (eixoRotacao)  // TODO: ainda não uso no exemplo
       {
         case 'x':
           matrizTmpRotacao.AtribuirRotacaoX(Transformacao4D.DEG_TO_RAD * angulo);
@@ -337,7 +336,7 @@ namespace gcgcg
     }
 
 #if CG_Debug
-    public string ImprimeToString()
+    protected string ImprimeToString()
     {
       string retorno;
       retorno = "__ Objeto: " + rotulo + "\n";
