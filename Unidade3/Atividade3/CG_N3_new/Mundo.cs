@@ -205,6 +205,8 @@ namespace gcgcg
         objetoSelecionado.shaderCor = _shaderAzul; 
       if (input.IsKeyPressed(Keys.G))
         objetoSelecionado.shaderCor = _shaderVerde;
+      if (input.IsKeyPressed(Keys.D))
+        objetoSelecionado.Deletar(objetoSelecionado);
       //TODO: não está atualizando a BBox com as transformações geométricas
       if (input.IsKeyPressed(Keys.I) && objetoSelecionado != null)
         objetoSelecionado.MatrizAtribuirIdentidade();

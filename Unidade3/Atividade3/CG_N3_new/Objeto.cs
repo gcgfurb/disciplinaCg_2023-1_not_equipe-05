@@ -166,9 +166,13 @@ namespace gcgcg
       pontosLista.Add(pto);
       ObjetoAtualizar();
     }
+    public void Deletar(Objeto filho)
+    {
+      if (this.objetosLista.Count == 0) paiRef.FilhoRemover(filho);
+    }
     public void FilhoRemover(Objeto filho)
     {
-      if (filho.rotulo != '@') this.objetosLista.Remove(filho);
+      this.objetosLista.Remove(filho);
     }
 
     public bool EhVazio()
