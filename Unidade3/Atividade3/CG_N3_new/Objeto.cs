@@ -95,6 +95,25 @@ namespace gcgcg
       GL.EnableVertexAttribArray(0);
     }
 
+    // num geral, funciona
+    // mas, às vezes, ele pega o vértice da outro ponto (pq, por alguma razão, a distância dá igual)
+    // exemplo: clico perto do ponto 0 e ele me puxa o ponto 2 do quadrado
+    public int PontoMaisProximo(Ponto4D sruPonto){
+      double dist = 100.0;
+      int resp = 0;
+      for (int i = 0; i < this.pontosLista.Count; i++){
+        double temp = (sruPonto.X - this.pontosLista[i].X) + (sruPonto.Y - this.pontosLista[i].Y);
+        if (temp < 0){
+          temp = temp * (-1);
+        }
+        if (temp <= dist){
+          dist = temp;
+          resp = i;
+        }
+      }
+      return resp;
+    }
+
     public void Desenhar(Transformacao4D matrizGrafo)
     {
 #if CG_OpenGL && !CG_DirectX
@@ -184,6 +203,11 @@ namespace gcgcg
     public void PontosAlterar(Ponto4D pto, int posicao)
     {
       pontosLista[posicao] = pto;
+      ObjetoAtualizar();
+    }
+
+    public void PontoRemover(Ponto4D pto){
+      pontosLista.Remove(pto);
       ObjetoAtualizar();
     }
 

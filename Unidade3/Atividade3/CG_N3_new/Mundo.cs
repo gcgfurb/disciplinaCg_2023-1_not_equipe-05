@@ -20,9 +20,10 @@ namespace gcgcg
   {
     Objeto mundo;
     private char rotuloNovo = '?';
+    private int contador = -1;
     private Objeto objetoSelecionado = null;
     private List<Ponto> listaPontos = new List<Ponto>();
-    private SegReta retaMouseTrace;
+    private SegReta retaMouseTrace = null;
     private bool mouseTrace = false;
 
     private readonly float[] _sruEixos =
@@ -195,10 +196,15 @@ namespace gcgcg
       }
       if (input.IsKeyPressed(Keys.F))
         mundo.GrafocenaImprimir("");
+      if (input.IsKeyPressed(Keys.P))
+        // abre e fecha polígono
+        if (objetoSelecionado.PrimitivaTipo == PrimitiveType.LineLoop) objetoSelecionado.PrimitivaTipo = PrimitiveType.LineStrip;
+        else if (objetoSelecionado.PrimitivaTipo == PrimitiveType.LineStrip) objetoSelecionado.PrimitivaTipo = PrimitiveType.LineLoop;
       if (input.IsKeyPressed(Keys.P) && objetoSelecionado != null)
         System.Console.WriteLine(objetoSelecionado.ToString());
       if (input.IsKeyPressed(Keys.M) && objetoSelecionado != null)
         objetoSelecionado.MatrizImprimir();
+        // cores
       if (input.IsKeyPressed(Keys.R))
         objetoSelecionado.shaderCor = _shaderVermelha;
       if (input.IsKeyPressed(Keys.B))
@@ -207,6 +213,14 @@ namespace gcgcg
         objetoSelecionado.shaderCor = _shaderVerde;
       if (input.IsKeyPressed(Keys.D))
         objetoSelecionado.Deletar(objetoSelecionado);
+        // remove vértices
+      if (input.IsKeyPressed(Keys.E)){
+        int janelaLargura = Size.X;
+        int janelaAltura = Size.Y;
+        Ponto4D mousePonto = new Ponto4D(MousePosition.X, MousePosition.Y);
+        Ponto4D sruPonto = Utilitario.NDC_TelaSRU(janelaLargura, janelaAltura, mousePonto);
+        objetoSelecionado.PontoRemover(objetoSelecionado.PontosId(objetoSelecionado.PontoMaisProximo(sruPonto)));
+      }
       //TODO: não está atualizando a BBox com as transformações geométricas
       if (input.IsKeyPressed(Keys.I) && objetoSelecionado != null)
         objetoSelecionado.MatrizAtribuirIdentidade();
@@ -248,9 +262,16 @@ namespace gcgcg
         ponto.PrimitivaTipo = PrimitiveType.Points;
         ponto.PrimitivaTamanho = 10;
         ponto.MatrizImprimir();
-
+        contador+=1;
         listaPontos.Add(ponto);
-        
+
+        // tentei fazer aqui o lance de por as retas pra formar o polígono, mas n tá indo direito
+
+        // if (retaMouseTrace != null && listaPontos.Count > 1) {
+        //   Ponto4D p1 = new Ponto4D(listaPontos[contador].PontosId(0).X, listaPontos[contador].PontosId(0).Y);
+        //   Ponto4D p2 = new Ponto4D(listaPontos[contador + 1].PontosId(0).X, listaPontos[contador + 1].PontosId(0).Y);
+        //   SegReta rt = new SegReta(objetoSelecionado, ref rotuloNovo, p1, p2);
+        // }
 
       }
       if (MouseState.IsButtonDown(MouseButton.Right) && objetoSelecionado != null)
@@ -262,36 +283,34 @@ namespace gcgcg
         Ponto4D mousePonto = new Ponto4D(MousePosition.X, MousePosition.Y);
         Ponto4D sruPonto = Utilitario.NDC_TelaSRU(janelaLargura, janelaAltura, mousePonto);
 
-        objetoSelecionado.PontosAlterar(sruPonto, 0);
+        // tentando mover os vértices, às vezes dá um bug, explicado dentro da classe Objeto
+        objetoSelecionado.PontosAlterar(sruPonto, objetoSelecionado.PontoMaisProximo(sruPonto));
       }
       if (MouseState.IsButtonReleased(MouseButton.Right))
       {
         System.Console.WriteLine("MouseState.IsButtonReleased(MouseButton.Right)");
       }
         
-
-
-
-        
+      
       if (listaPontos.Count > 0) {
         if (!mouseTrace) {
-                Ponto4D p1 = new Ponto4D(listaPontos[listaPontos.Count - 1].PontosId(0).X, listaPontos[listaPontos.Count - 1].PontosId(0).Y);
-                Ponto4D p2 = new Ponto4D(new Ponto4D(converteValorPonto(MousePosition.X, true), converteValorPonto(MousePosition.Y, false)));
+          Ponto4D p1 = new Ponto4D(listaPontos[listaPontos.Count - 1].PontosId(0).X, listaPontos[listaPontos.Count - 1].PontosId(0).Y);
+          Ponto4D p2 = new Ponto4D(new Ponto4D(converteValorPonto(MousePosition.X, true), converteValorPonto(MousePosition.Y, false)));
 
-                retaMouseTrace = new SegReta(objetoSelecionado, ref rotuloNovo, p1, p2);
-                mouseTrace = true;
-                //Lembrar de alterar o mouseTrace quando finalizar a criação do poligono
-              }
-              else {
-                Ponto4D p1 = new Ponto4D(listaPontos[listaPontos.Count - 1].PontosId(0).X, listaPontos[listaPontos.Count - 1].PontosId(0).Y);
-                Ponto4D p2 = new Ponto4D(new Ponto4D(converteValorPonto(MousePosition.X, true), converteValorPonto(MousePosition.Y, false)));
-                retaMouseTrace.PontosAlterar(p1, 0);
-                retaMouseTrace.PontosAlterar(p2, 1);
-                retaMouseTrace.ObjetoAtualizar();
-              }
+          retaMouseTrace = new SegReta(objetoSelecionado, ref rotuloNovo, p1, p2);
 
+          mouseTrace = true;
+          //Lembrar de alterar o mouseTrace quando finalizar a criação do poligono
+        }
+        else {
+          Ponto4D p1 = new Ponto4D(listaPontos[listaPontos.Count - 1].PontosId(0).X, listaPontos[listaPontos.Count - 1].PontosId(0).Y);
+          Ponto4D p2 = new Ponto4D(new Ponto4D(converteValorPonto(MousePosition.X, true), converteValorPonto(MousePosition.Y, false)));
+          
+          retaMouseTrace.PontosAlterar(p1, 0);
+          retaMouseTrace.PontosAlterar(p2, 1);
+          retaMouseTrace.ObjetoAtualizar();
+        }
       }
-      
     
       #endregion
 
