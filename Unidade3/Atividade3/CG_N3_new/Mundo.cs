@@ -19,6 +19,9 @@ namespace gcgcg
   public class Mundo : GameWindow
   {
     Objeto mundo;
+
+    private Retangulo teste = null;
+
     private char rotuloNovo = '?';
     private int contador = -1;
     private Objeto objetoSelecionado = null;
@@ -188,11 +191,18 @@ namespace gcgcg
       var input = KeyboardState;
       if (input.IsKeyDown(Keys.Escape))
         Close();
-      if (input.IsKeyPressed(Keys.Space) && objetoSelecionado != null)
+      if (input.IsKeyPressed(Keys.S) && objetoSelecionado != null)
       {
+        // uso pra q esse resultado??
+        Ponto4D mousePoint = new Ponto4D(new Ponto4D(converteValorPonto(MousePosition.X, true), converteValorPonto(MousePosition.Y, false)));
+        bool resp = objetoSelecionado.VerificarInterseccao(mousePoint);
+
         objetoSelecionado.shaderCor = _shaderBranca;
         objetoSelecionado = mundo.GrafocenaBuscaProximo(objetoSelecionado);
-        objetoSelecionado.shaderCor = _shaderAmarela;
+
+        teste = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(objetoSelecionado.Bbox().obterMenorX, objetoSelecionado.Bbox().obterMaiorX), new Ponto4D(objetoSelecionado.Bbox().obterMenorY, objetoSelecionado.Bbox().obterMaiorY));
+        teste.shaderCor = _shaderAmarela;
+        teste.PrimitivaTipo = PrimitiveType.LineLoop;
       }
       if (input.IsKeyPressed(Keys.F))
         mundo.GrafocenaImprimir("");

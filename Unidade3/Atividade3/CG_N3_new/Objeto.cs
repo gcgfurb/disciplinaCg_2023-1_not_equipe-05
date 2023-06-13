@@ -36,6 +36,11 @@ namespace gcgcg
       return bBox;
     }
 
+    public List<Ponto4D> getListaPontos()
+    {
+      return pontosLista;
+    }
+
     // Transformações do objeto
     private Transformacao4D matriz = new Transformacao4D();
 
