@@ -179,7 +179,19 @@ namespace gcgcg
     {
       this.objetosLista.Add(filho);
     }
+    public List<Objeto> GetObjetosLista(){
+      return objetosLista;
+    }
 
+    public List<Objeto> GetObjetosLista(Type t){
+      List<Objeto> temp = new List<Objeto>();
+      foreach (Objeto obj in GetObjetosLista()) {
+        if (obj.GetType() == t) {
+          temp.Add(obj);
+        }
+      }
+      return temp;
+    }
     public Ponto4D PontosId(int id)
     {
       return pontosLista[id];

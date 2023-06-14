@@ -28,6 +28,7 @@ namespace gcgcg
     private List<Ponto> listaPontos = new List<Ponto>();
     private SegReta retaMouseTrace = null;
     private bool mouseTrace = false;
+    private bool drawingShape = false;
 
     private readonly float[] _sruEixos =
     {
@@ -191,6 +192,51 @@ namespace gcgcg
       var input = KeyboardState;
       if (input.IsKeyDown(Keys.Escape))
         Close();
+
+
+
+      if (input.IsKeyDown(Keys.Enter)) {
+        if (drawingShape && listaPontos.Count > 1) {
+          Ponto lastPonto = listaPontos[listaPontos.Count - 1];
+          Ponto firstPonto = listaPontos[0];
+          Ponto4D lastPonto4D = new Ponto4D(lastPonto.PontosId(0).X, lastPonto.PontosId(0).Y);
+          Ponto4D firstPonto4D = new Ponto4D(firstPonto.PontosId(0).X, firstPonto.PontosId(0).Y);
+
+          SegReta lastReta = new SegReta(objetoSelecionado, ref rotuloNovo, lastPonto4D, firstPonto4D);
+
+          List<Ponto4D> listaPontos4D = new List<Ponto4D>();
+
+          foreach (Ponto p in listaPontos) {
+            Ponto4D currentPonto4d = new Ponto4D(p.PontosId(0).X, p.PontosId(0).Y);
+            listaPontos4D.Add(currentPonto4d);
+          }
+
+          
+          Poligono newPoligono = new Poligono(objetoSelecionado, ref rotuloNovo, listaPontos4D);
+          listaPontos.Clear();
+
+          List<Objeto> segRetas = objetoSelecionado.GetObjetosLista(typeof(SegReta));
+          List<Objeto> pontos = objetoSelecionado.GetObjetosLista(typeof(Ponto));
+
+          foreach (SegReta seg in segRetas) {
+            objetoSelecionado.FilhoRemover(seg);
+
+          }
+
+          foreach (Ponto p in pontos) {
+            objetoSelecionado.FilhoRemover(p);
+
+          }
+
+
+          objetoSelecionado = newPoligono;
+          drawingShape = false;
+          mouseTrace = false;
+          // ARRUMAR QUE NAO FUNCIONA MAIS APOS DELETAR O OBJETO
+        }
+
+        
+      }
       if (input.IsKeyPressed(Keys.S) && objetoSelecionado != null)
       {
         // uso pra q esse resultado??
@@ -200,9 +246,9 @@ namespace gcgcg
         objetoSelecionado.shaderCor = _shaderBranca;
         objetoSelecionado = mundo.GrafocenaBuscaProximo(objetoSelecionado);
 
-        teste = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(objetoSelecionado.Bbox().obterMenorX, objetoSelecionado.Bbox().obterMaiorX), new Ponto4D(objetoSelecionado.Bbox().obterMenorY, objetoSelecionado.Bbox().obterMaiorY));
-        teste.shaderCor = _shaderAmarela;
-        teste.PrimitivaTipo = PrimitiveType.LineLoop;
+        // teste = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(objetoSelecionado.Bbox().obterMenorX, objetoSelecionado.Bbox().obterMaiorX), new Ponto4D(objetoSelecionado.Bbox().obterMenorY, objetoSelecionado.Bbox().obterMaiorY));
+        // teste.shaderCor = _shaderAmarela;
+        // teste.PrimitivaTipo = PrimitiveType.LineLoop;
       }
       if (input.IsKeyPressed(Keys.F))
         mundo.GrafocenaImprimir("");
@@ -268,12 +314,23 @@ namespace gcgcg
         System.Console.WriteLine("__ Valores do Espaço de Tela");
         System.Console.WriteLine("Vector2 mousePosition: " + MousePosition);
         System.Console.WriteLine("Vector2i windowSize: " + Size);
-        Ponto ponto = new Ponto(objetoSelecionado, ref rotuloNovo, new Ponto4D(converteValorPonto(MousePosition.X, true), converteValorPonto(MousePosition.Y, false)));
-        ponto.PrimitivaTipo = PrimitiveType.Points;
-        ponto.PrimitivaTamanho = 10;
-        ponto.MatrizImprimir();
+        
+        Ponto newPonto = new Ponto(objetoSelecionado, ref rotuloNovo, new Ponto4D(converteValorPonto(MousePosition.X, true), converteValorPonto(MousePosition.Y, false)));
+        newPonto.PrimitivaTipo = PrimitiveType.Points;
+        newPonto.PrimitivaTamanho = 10;
+        newPonto.MatrizImprimir();
         contador+=1;
-        listaPontos.Add(ponto);
+        listaPontos.Add(newPonto);
+
+        drawingShape = true;
+        // alterar para false na hora de instanciar o poligono
+        if (drawingShape && listaPontos.Count > 1) {
+          Ponto lastPonto = listaPontos[listaPontos.Count - 2];
+          Ponto4D lastPonto4D = new Ponto4D(lastPonto.PontosId(0).X, lastPonto.PontosId(0).Y);
+          Ponto4D newPonto4D = new Ponto4D(newPonto.PontosId(0).X, newPonto.PontosId(0).Y);
+
+          SegReta lastReta = new SegReta(objetoSelecionado, ref rotuloNovo, lastPonto4D, newPonto4D);
+        }
 
         // tentei fazer aqui o lance de por as retas pra formar o polígono, mas n tá indo direito
 
@@ -302,7 +359,7 @@ namespace gcgcg
       }
         
       
-      if (listaPontos.Count > 0) {
+      if (drawingShape) {
         if (!mouseTrace) {
           Ponto4D p1 = new Ponto4D(listaPontos[listaPontos.Count - 1].PontosId(0).X, listaPontos[listaPontos.Count - 1].PontosId(0).Y);
           Ponto4D p2 = new Ponto4D(new Ponto4D(converteValorPonto(MousePosition.X, true), converteValorPonto(MousePosition.Y, false)));
