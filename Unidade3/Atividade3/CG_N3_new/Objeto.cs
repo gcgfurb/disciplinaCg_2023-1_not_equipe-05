@@ -119,6 +119,17 @@ namespace gcgcg
       return resp;
     }
 
+    public bool estaNaBbox(Ponto4D pto){
+      if (pto.X > this.Bbox().obterMenorX &&
+          pto.X < this.Bbox().obterMaiorX &&
+          pto.Y > this.Bbox().obterMenorY &&
+          pto.Y < this.Bbox().obterMaiorY)
+        {
+        return true;
+        }
+      return false;
+    }
+
     public void Desenhar(Transformacao4D matrizGrafo)
     {
 #if CG_OpenGL && !CG_DirectX

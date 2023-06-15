@@ -239,12 +239,25 @@ namespace gcgcg
       }
       if (input.IsKeyPressed(Keys.S) && objetoSelecionado != null)
       {
-        // uso pra q esse resultado??
+        // pega o ponto do mouse
         Ponto4D mousePoint = new Ponto4D(new Ponto4D(converteValorPonto(MousePosition.X, true), converteValorPonto(MousePosition.Y, false)));
+        
+        //vê se o mouse tá dentro da BBox do obj
+        foreach (Objeto obj in mundo.GetObjetosLista())
+        {
+          if (obj.estaNaBbox(mousePoint)){
+            // rever a logica, não tá pegando os filhos
+            objetoSelecionado.shaderCor = _shaderBranca;
+            objetoSelecionado = obj;
+            objetoSelecionado.shaderCor = _shaderAmarela;
+          }
+        }
+        //scanline
         bool resp = objetoSelecionado.VerificarInterseccao(mousePoint);
 
-        objetoSelecionado.shaderCor = _shaderBranca;
-        objetoSelecionado = mundo.GrafocenaBuscaProximo(objetoSelecionado);
+
+        // objetoSelecionado.shaderCor = _shaderBranca;
+        // objetoSelecionado = mundo.GrafocenaBuscaProximo(objetoSelecionado);
 
         // teste = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(objetoSelecionado.Bbox().obterMenorX, objetoSelecionado.Bbox().obterMaiorX), new Ponto4D(objetoSelecionado.Bbox().obterMenorY, objetoSelecionado.Bbox().obterMaiorY));
         // teste.shaderCor = _shaderAmarela;
