@@ -287,9 +287,12 @@ namespace gcgcg
         objetoSelecionado.shaderCor = _shaderAzul; 
       if (input.IsKeyPressed(Keys.G))
         objetoSelecionado.shaderCor = _shaderVerde;
-      if (input.IsKeyPressed(Keys.D))
-        if(objetoSelecionado != null)
+      if (input.IsKeyPressed(Keys.D)){
+        if(objetoSelecionado != null){
           objetoSelecionado.Deletar(objetoSelecionado);
+          objetoSelecionado = mundo.GrafocenaBuscaProximo(objetoSelecionado);
+        }
+      }
         // remove vértices
       if (input.IsKeyPressed(Keys.E)){
         int janelaLargura = Size.X;
