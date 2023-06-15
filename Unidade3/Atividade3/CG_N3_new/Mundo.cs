@@ -27,6 +27,8 @@ namespace gcgcg
     private Objeto objetoSelecionado = null;
     private List<Ponto> listaPontos = new List<Ponto>();
     private SegReta retaMouseTrace = null;
+    private SegReta retaMouseTraceStart = null;
+    private SegReta retaMouseTraceLast = null;
     private Poligono drawingPoligono = null;
     private bool mouseTrace = false;
     private bool drawingShape = false;
@@ -342,14 +344,68 @@ namespace gcgcg
 
         drawingShape = true;
         // alterar para false na hora de instanciar o poligono
-        if (drawingShape && listaPontos.Count > 1) {
-          Ponto lastPonto = listaPontos[listaPontos.Count - 2];
-          Ponto4D lastPonto4D = new Ponto4D(lastPonto.PontosId(0).X, lastPonto.PontosId(0).Y);
-          Ponto4D newPonto4D = new Ponto4D(newPonto.PontosId(0).X, newPonto.PontosId(0).Y);
 
-          SegReta lastReta = new SegReta(drawingPoligono, ref rotuloNovo, lastPonto4D, newPonto4D);
+        if (drawingShape && listaPontos.Count > 3) {
+          // remove a reta entre o primeiro ponto e o ultimo ponto para que depois seja recriada com o ultimo ponto mais recente
+          List<Objeto> segRetas = drawingPoligono.GetObjetosLista(typeof(SegReta));
+          drawingPoligono.FilhoRemover(segRetas[segRetas.Count - 1]);
         }
 
+        if (drawingShape && listaPontos.Count > 1) {
+
+          Ponto lastPonto = listaPontos[listaPontos.Count - 2];
+          Ponto firstPonto = listaPontos[0];
+          Ponto4D lastPonto4D = new Ponto4D(lastPonto.PontosId(0).X, lastPonto.PontosId(0).Y);
+          Ponto4D newPonto4D = new Ponto4D(newPonto.PontosId(0).X, newPonto.PontosId(0).Y);
+          Ponto4D firstPonto4D = new Ponto4D(firstPonto.PontosId(0).X, firstPonto.PontosId(0).Y);
+
+          //importante manter a ordem de criação dessas retas
+          SegReta lastReta = new SegReta(drawingPoligono, ref rotuloNovo, lastPonto4D, newPonto4D);
+          SegReta firstReta = new SegReta(drawingPoligono, ref rotuloNovo, firstPonto4D, newPonto4D);
+        }
+      }
+      if (MouseState.IsButtonDown(MouseButton.Left)) {
+        List<Objeto> pontosPoligono = drawingPoligono.GetObjetosLista(typeof(Ponto));
+
+        if (drawingShape && listaPontos.Count > 1) {
+          if (!mouseTrace) {
+            Ponto firstPonto = listaPontos[0];
+            Ponto lastPonto = listaPontos[listaPontos.Count - 1];
+            Ponto4D lastPonto4D = new Ponto4D(lastPonto.PontosId(0).X, lastPonto.PontosId(0).Y);
+            Ponto4D firstPonto4D = new Ponto4D(firstPonto.PontosId(0).X, firstPonto.PontosId(0).Y);
+            Ponto4D pMouse = new Ponto4D(new Ponto4D(converteValorPonto(MousePosition.X, true), converteValorPonto(MousePosition.Y, false)));
+
+            retaMouseTraceStart = new SegReta(drawingPoligono, ref rotuloNovo, firstPonto4D, pMouse);
+            retaMouseTraceLast = new SegReta(drawingPoligono, ref rotuloNovo, lastPonto4D, pMouse);
+
+            mouseTrace = true;
+          }
+          else {
+            Ponto firstPonto = listaPontos[0];
+            Ponto lastPonto = listaPontos[listaPontos.Count - 1];
+            Ponto4D lastPonto4D = new Ponto4D(lastPonto.PontosId(0).X, lastPonto.PontosId(0).Y);
+            Ponto4D firstPonto4D = new Ponto4D(firstPonto.PontosId(0).X, firstPonto.PontosId(0).Y);
+            Ponto4D pMouse = new Ponto4D(new Ponto4D(converteValorPonto(MousePosition.X, true), converteValorPonto(MousePosition.Y, false)));
+            
+            retaMouseTraceStart.PontosAlterar(firstPonto4D, 0);
+            retaMouseTraceStart.PontosAlterar(pMouse, 1);
+            retaMouseTraceStart.ObjetoAtualizar();
+
+            retaMouseTraceLast.PontosAlterar(pMouse, 0);
+            retaMouseTraceLast.PontosAlterar(lastPonto4D, 1);
+            retaMouseTraceLast.ObjetoAtualizar();
+          }
+        }
+      }
+      if (MouseState.IsButtonReleased(MouseButton.Left)) {
+        Ponto newPonto = new Ponto(drawingPoligono, ref rotuloNovo, new Ponto4D(converteValorPonto(MousePosition.X, true), converteValorPonto(MousePosition.Y, false)));
+        newPonto.PrimitivaTipo = PrimitiveType.Points;
+        newPonto.PrimitivaTamanho = 10;
+        newPonto.MatrizImprimir();
+        contador+=1;
+        listaPontos.Add(newPonto);
+
+        drawingShape = true;
       }
       if (MouseState.IsButtonDown(MouseButton.Right) && objetoSelecionado != null)
       {
@@ -369,25 +425,25 @@ namespace gcgcg
       }
         
       
-      if (drawingShape) {
-        if (!mouseTrace) {
-          Ponto4D p1 = new Ponto4D(listaPontos[listaPontos.Count - 1].PontosId(0).X, listaPontos[listaPontos.Count - 1].PontosId(0).Y);
-          Ponto4D p2 = new Ponto4D(new Ponto4D(converteValorPonto(MousePosition.X, true), converteValorPonto(MousePosition.Y, false)));
+      // if (drawingShape) {
+      //   if (!mouseTrace) {
+      //     Ponto4D p1 = new Ponto4D(listaPontos[listaPontos.Count - 1].PontosId(0).X, listaPontos[listaPontos.Count - 1].PontosId(0).Y);
+      //     Ponto4D p2 = new Ponto4D(new Ponto4D(converteValorPonto(MousePosition.X, true), converteValorPonto(MousePosition.Y, false)));
 
-          retaMouseTrace = new SegReta(drawingPoligono, ref rotuloNovo, p1, p2);
+      //     retaMouseTrace = new SegReta(drawingPoligono, ref rotuloNovo, p1, p2);
 
-          mouseTrace = true;
-          //Lembrar de alterar o mouseTrace quando finalizar a criação do poligono
-        }
-        else {
-          Ponto4D p1 = new Ponto4D(listaPontos[listaPontos.Count - 1].PontosId(0).X, listaPontos[listaPontos.Count - 1].PontosId(0).Y);
-          Ponto4D p2 = new Ponto4D(new Ponto4D(converteValorPonto(MousePosition.X, true), converteValorPonto(MousePosition.Y, false)));
+      //     mouseTrace = true;
+      //     //Lembrar de alterar o mouseTrace quando finalizar a criação do poligono
+      //   }
+      //   else {
+      //     Ponto4D p1 = new Ponto4D(listaPontos[listaPontos.Count - 1].PontosId(0).X, listaPontos[listaPontos.Count - 1].PontosId(0).Y);
+      //     Ponto4D p2 = new Ponto4D(new Ponto4D(converteValorPonto(MousePosition.X, true), converteValorPonto(MousePosition.Y, false)));
           
-          retaMouseTrace.PontosAlterar(p1, 0);
-          retaMouseTrace.PontosAlterar(p2, 1);
-          retaMouseTrace.ObjetoAtualizar();
-        }
-      }
+      //     retaMouseTrace.PontosAlterar(p1, 0);
+      //     retaMouseTrace.PontosAlterar(p2, 1);
+      //     retaMouseTrace.ObjetoAtualizar();
+      //   }
+      // }
     
       #endregion
 
