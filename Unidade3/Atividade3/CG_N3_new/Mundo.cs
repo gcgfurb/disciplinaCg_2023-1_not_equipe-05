@@ -27,6 +27,7 @@ namespace gcgcg
     private Objeto objetoSelecionado = null;
     private List<Ponto> listaPontos = new List<Ponto>();
     private SegReta retaMouseTrace = null;
+    private Poligono drawingPoligono = null;
     private bool mouseTrace = false;
     private bool drawingShape = false;
 
@@ -53,7 +54,7 @@ namespace gcgcg
     {
       mundo = new Objeto(null, ref rotuloNovo);
     }
-
+    
     private void Diretivas()
     {
 #if DEBUG
@@ -104,6 +105,12 @@ namespace gcgcg
       GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
       GL.EnableVertexAttribArray(0);
       #endregion
+
+      //inicia drawingPoligono
+      List<Ponto4D> buffer = new List<Ponto4D>();
+      buffer.Add(new Ponto4D(0, 0));
+      
+      drawingPoligono = new Poligono(mundo, ref rotuloNovo, buffer);
 
       #region Objeto: polígono qualquer  
       List<Ponto4D> pontosPoligonoBandeira = new List<Ponto4D>();
@@ -202,7 +209,7 @@ namespace gcgcg
           Ponto4D lastPonto4D = new Ponto4D(lastPonto.PontosId(0).X, lastPonto.PontosId(0).Y);
           Ponto4D firstPonto4D = new Ponto4D(firstPonto.PontosId(0).X, firstPonto.PontosId(0).Y);
 
-          SegReta lastReta = new SegReta(objetoSelecionado, ref rotuloNovo, lastPonto4D, firstPonto4D);
+          SegReta lastReta = new SegReta(drawingPoligono, ref rotuloNovo, lastPonto4D, firstPonto4D);
 
           List<Ponto4D> listaPontos4D = new List<Ponto4D>();
 
@@ -212,22 +219,20 @@ namespace gcgcg
           }
 
           
-          Poligono newPoligono = new Poligono(objetoSelecionado, ref rotuloNovo, listaPontos4D);
+          Poligono newPoligono = new Poligono(mundo, ref rotuloNovo, listaPontos4D);
           listaPontos.Clear();
+          contador = 0;
 
-          List<Objeto> segRetas = objetoSelecionado.GetObjetosLista(typeof(SegReta));
-          List<Objeto> pontos = objetoSelecionado.GetObjetosLista(typeof(Ponto));
+          List<Objeto> segRetas = drawingPoligono.GetObjetosLista(typeof(SegReta));
+          List<Objeto> pontos = drawingPoligono.GetObjetosLista(typeof(Ponto));
 
           foreach (SegReta seg in segRetas) {
-            objetoSelecionado.FilhoRemover(seg);
-
+            drawingPoligono.FilhoRemover(seg);
           }
 
           foreach (Ponto p in pontos) {
-            objetoSelecionado.FilhoRemover(p);
-
+            drawingPoligono.FilhoRemover(p);
           }
-
 
           objetoSelecionado = newPoligono;
           drawingShape = false;
@@ -243,21 +248,21 @@ namespace gcgcg
         Ponto4D mousePoint = new Ponto4D(new Ponto4D(converteValorPonto(MousePosition.X, true), converteValorPonto(MousePosition.Y, false)));
         
         //vê se o mouse tá dentro da BBox do obj
-        foreach (Objeto obj in mundo.GetObjetosLista())
-        {
-          if (obj.estaNaBbox(mousePoint)){
-            // rever a logica, não tá pegando os filhos
-            objetoSelecionado.shaderCor = _shaderBranca;
-            objetoSelecionado = obj;
-            objetoSelecionado.shaderCor = _shaderAmarela;
-          }
-        }
+        // foreach (Objeto obj in mundo.GetObjetosLista())
+        // {
+        //   if (obj.estaNaBbox(mousePoint)){
+        //     // rever a logica, não tá pegando os filhos
+        //     objetoSelecionado.shaderCor = _shaderBranca;
+        //     objetoSelecionado = obj;
+        //     objetoSelecionado.shaderCor = _shaderAmarela;
+        //   }
+        // }
         //scanline
         bool resp = objetoSelecionado.VerificarInterseccao(mousePoint);
 
 
-        // objetoSelecionado.shaderCor = _shaderBranca;
-        // objetoSelecionado = mundo.GrafocenaBuscaProximo(objetoSelecionado);
+        objetoSelecionado.shaderCor = _shaderBranca;
+        objetoSelecionado = mundo.GrafocenaBuscaProximo(objetoSelecionado);
 
         // teste = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(objetoSelecionado.Bbox().obterMenorX, objetoSelecionado.Bbox().obterMaiorX), new Ponto4D(objetoSelecionado.Bbox().obterMenorY, objetoSelecionado.Bbox().obterMaiorY));
         // teste.shaderCor = _shaderAmarela;
@@ -281,7 +286,8 @@ namespace gcgcg
       if (input.IsKeyPressed(Keys.G))
         objetoSelecionado.shaderCor = _shaderVerde;
       if (input.IsKeyPressed(Keys.D))
-        objetoSelecionado.Deletar(objetoSelecionado);
+        if(objetoSelecionado != null)
+          objetoSelecionado.Deletar(objetoSelecionado);
         // remove vértices
       if (input.IsKeyPressed(Keys.E)){
         int janelaLargura = Size.X;
@@ -327,8 +333,7 @@ namespace gcgcg
         System.Console.WriteLine("__ Valores do Espaço de Tela");
         System.Console.WriteLine("Vector2 mousePosition: " + MousePosition);
         System.Console.WriteLine("Vector2i windowSize: " + Size);
-        
-        Ponto newPonto = new Ponto(objetoSelecionado, ref rotuloNovo, new Ponto4D(converteValorPonto(MousePosition.X, true), converteValorPonto(MousePosition.Y, false)));
+        Ponto newPonto = new Ponto(drawingPoligono, ref rotuloNovo, new Ponto4D(converteValorPonto(MousePosition.X, true), converteValorPonto(MousePosition.Y, false)));
         newPonto.PrimitivaTipo = PrimitiveType.Points;
         newPonto.PrimitivaTamanho = 10;
         newPonto.MatrizImprimir();
@@ -342,16 +347,8 @@ namespace gcgcg
           Ponto4D lastPonto4D = new Ponto4D(lastPonto.PontosId(0).X, lastPonto.PontosId(0).Y);
           Ponto4D newPonto4D = new Ponto4D(newPonto.PontosId(0).X, newPonto.PontosId(0).Y);
 
-          SegReta lastReta = new SegReta(objetoSelecionado, ref rotuloNovo, lastPonto4D, newPonto4D);
+          SegReta lastReta = new SegReta(drawingPoligono, ref rotuloNovo, lastPonto4D, newPonto4D);
         }
-
-        // tentei fazer aqui o lance de por as retas pra formar o polígono, mas n tá indo direito
-
-        // if (retaMouseTrace != null && listaPontos.Count > 1) {
-        //   Ponto4D p1 = new Ponto4D(listaPontos[contador].PontosId(0).X, listaPontos[contador].PontosId(0).Y);
-        //   Ponto4D p2 = new Ponto4D(listaPontos[contador + 1].PontosId(0).X, listaPontos[contador + 1].PontosId(0).Y);
-        //   SegReta rt = new SegReta(objetoSelecionado, ref rotuloNovo, p1, p2);
-        // }
 
       }
       if (MouseState.IsButtonDown(MouseButton.Right) && objetoSelecionado != null)
@@ -377,7 +374,7 @@ namespace gcgcg
           Ponto4D p1 = new Ponto4D(listaPontos[listaPontos.Count - 1].PontosId(0).X, listaPontos[listaPontos.Count - 1].PontosId(0).Y);
           Ponto4D p2 = new Ponto4D(new Ponto4D(converteValorPonto(MousePosition.X, true), converteValorPonto(MousePosition.Y, false)));
 
-          retaMouseTrace = new SegReta(objetoSelecionado, ref rotuloNovo, p1, p2);
+          retaMouseTrace = new SegReta(drawingPoligono, ref rotuloNovo, p1, p2);
 
           mouseTrace = true;
           //Lembrar de alterar o mouseTrace quando finalizar a criação do poligono
