@@ -22,7 +22,7 @@ namespace gcgcg
 
     private Retangulo bbox = null;
     private Ponto bboxPto = null;
-    private bool visualizaBBox = false;
+    private bool temBbox = false;
     private char rotuloNovo = '?';
     private int contador = -1;
     private Objeto objetoSelecionado = null;
@@ -203,11 +203,11 @@ namespace gcgcg
       if (input.IsKeyDown(Keys.Escape))
         Close();
 
-
-      if (input.IsAnyKeyDown || MouseState.IsAnyButtonDown){
-        // visualizaBBox = false;
-        bbox = null;
-        bboxPto = null;
+      if (input.IsAnyKeyDown && !input.IsKeyDown(Keys.S)){
+        if (temBbox){
+          objetoSelecionado.FilhoRemover(bbox);
+          mundo.FilhoRemover(bboxPto);
+        }
       }
       if (input.IsKeyDown(Keys.Enter)) {
         if (drawingShape && listaPontos.Count > 1) {
@@ -253,7 +253,10 @@ namespace gcgcg
       if (input.IsKeyPressed(Keys.S) && objetoSelecionado != null)
       {
         objetoSelecionado.shaderCor = _shaderBranca;
-        
+        if (temBbox){
+          objetoSelecionado.FilhoRemover(bbox);
+          mundo.FilhoRemover(bboxPto);
+        }
         // pega o ponto do mouse
         Ponto4D mousePoint = new Ponto4D(new Ponto4D(converteValorPonto(MousePosition.X, true), converteValorPonto(MousePosition.Y, false)));
         //vê se o mouse tá dentro da BBox do obj
@@ -261,7 +264,7 @@ namespace gcgcg
         {
           if (mundo.GetObjetosLista()[i].analisaBbox(mousePoint) != null){
             objetoSelecionado = mundo.GetObjetosLista()[i].analisaBbox(mousePoint);
-            // visualizaBBox = true;
+            temBbox = true;
 
             bbox = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(objetoSelecionado.Bbox().obterMenorX, objetoSelecionado.Bbox().obterMenorY), new Ponto4D(objetoSelecionado.Bbox().obterMaiorX, objetoSelecionado.Bbox().obterMaiorY));
             bbox.shaderCor = _shaderAmarela;
