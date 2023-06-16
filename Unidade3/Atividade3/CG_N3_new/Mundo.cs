@@ -351,7 +351,7 @@ namespace gcgcg
       #region  Mouse
 
       if (MouseState.IsButtonPressed(MouseButton.Left))
-      {
+      {        
         System.Console.WriteLine("MouseState.IsButtonPressed(MouseButton.Left)");
         System.Console.WriteLine("__ Valores do Espaço de Tela");
         System.Console.WriteLine("Vector2 mousePosition: " + MousePosition);
@@ -364,12 +364,13 @@ namespace gcgcg
         listaPontos.Add(newPonto);
 
         drawingShape = true;
-        // alterar para false na hora de instanciar o poligono
+        //alterar para false na hora de instanciar o poligono
 
         if (drawingShape && listaPontos.Count > 3) {
           // remove a reta entre o primeiro ponto e o ultimo ponto para que depois seja recriada com o ultimo ponto mais recente
           List<Objeto> segRetas = drawingPoligono.GetObjetosLista(typeof(SegReta));
-          drawingPoligono.FilhoRemover(segRetas[segRetas.Count - 1]);
+          drawingPoligono.FilhoRemover(segRetas[segRetas.Count - 2]);
+          Console.WriteLine("Remover reta");
         }
 
         if (drawingShape && listaPontos.Count > 1) {
@@ -412,9 +413,12 @@ namespace gcgcg
             retaMouseTraceStart.PontosAlterar(pMouse, 1);
             retaMouseTraceStart.ObjetoAtualizar();
 
+            List<Objeto> segRetas = drawingPoligono.GetObjetosLista(typeof(SegReta));
+            retaMouseTraceLast = (SegReta) segRetas[segRetas.Count - 1];
             retaMouseTraceLast.PontosAlterar(pMouse, 0);
             retaMouseTraceLast.PontosAlterar(lastPonto4D, 1);
             retaMouseTraceLast.ObjetoAtualizar();
+            System.Console.WriteLine("atualizou"); 
           }
         }
       }
@@ -427,7 +431,21 @@ namespace gcgcg
         listaPontos.Add(newPonto);
 
         drawingShape = true;
+
+
+        if (listaPontos.Count > 2) {
+          Ponto4D newPonto4D = new Ponto4D(newPonto.PontosId(0).X, newPonto.PontosId(0).Y);
+
+          Ponto previousPonto = listaPontos[listaPontos.Count - 2]; 
+          Ponto4D previousPonto4D = new Ponto4D(previousPonto.PontosId(0).X, previousPonto.PontosId(0).Y);
+
+          SegReta reta = new SegReta(drawingPoligono, ref rotuloNovo, newPonto4D, previousPonto4D);
+        }
+
+
       }
+
+
       if (MouseState.IsButtonDown(MouseButton.Right) && objetoSelecionado != null)
       {
         System.Console.WriteLine("MouseState.IsButtonDown(MouseButton.Right)");
