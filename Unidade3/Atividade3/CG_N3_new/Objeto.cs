@@ -119,15 +119,22 @@ namespace gcgcg
       return resp;
     }
 
-    public bool estaNaBbox(Ponto4D pto){
+    public Objeto analisaBbox(Ponto4D pto){
+    // pra questão 9 -> Vê se está dentro da bbox do objeto/dos filhos e retorna o objeto mais de dentro
+      Objeto obj = null;
       if (pto.X > this.Bbox().obterMenorX &&
           pto.X < this.Bbox().obterMaiorX &&
           pto.Y > this.Bbox().obterMenorY &&
           pto.Y < this.Bbox().obterMaiorY)
         {
-        return true;
+        obj = this;
         }
-      return false;
+      for (var i=0; i <this.GetObjetosLista().Count; i++)
+      {
+        if (this.GetObjetosLista()[i].analisaBbox(pto) != null)
+        obj = this.GetObjetosLista()[i].analisaBbox(pto);
+      }
+      return obj;
     }
 
     public void Desenhar(Transformacao4D matrizGrafo)

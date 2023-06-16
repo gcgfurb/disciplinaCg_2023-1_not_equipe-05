@@ -20,8 +20,9 @@ namespace gcgcg
   {
     Objeto mundo;
 
-    private Retangulo teste = null;
-
+    private Retangulo bbox = null;
+    private Ponto bboxPto = null;
+    private bool visualizaBBox = false;
     private char rotuloNovo = '?';
     private int contador = -1;
     private Objeto objetoSelecionado = null;
@@ -203,7 +204,11 @@ namespace gcgcg
         Close();
 
 
-
+      if (input.IsAnyKeyDown || MouseState.IsAnyButtonDown){
+        // visualizaBBox = false;
+        bbox = null;
+        bboxPto = null;
+      }
       if (input.IsKeyDown(Keys.Enter)) {
         if (drawingShape && listaPontos.Count > 1) {
           Ponto lastPonto = listaPontos[listaPontos.Count - 1];
@@ -221,7 +226,7 @@ namespace gcgcg
           }
 
           
-          Poligono newPoligono = new Poligono(mundo, ref rotuloNovo, listaPontos4D);
+          Poligono newPoligono = new Poligono(objetoSelecionado, ref rotuloNovo, listaPontos4D);
           listaPontos.Clear();
           contador = 0;
 
@@ -236,6 +241,7 @@ namespace gcgcg
             drawingPoligono.FilhoRemover(p);
           }
 
+          objetoSelecionado.shaderCor = _shaderBranca;
           objetoSelecionado = newPoligono;
           drawingShape = false;
           mouseTrace = false;
@@ -246,30 +252,42 @@ namespace gcgcg
       }
       if (input.IsKeyPressed(Keys.S) && objetoSelecionado != null)
       {
+        objetoSelecionado.shaderCor = _shaderBranca;
+        
         // pega o ponto do mouse
         Ponto4D mousePoint = new Ponto4D(new Ponto4D(converteValorPonto(MousePosition.X, true), converteValorPonto(MousePosition.Y, false)));
-        
         //vê se o mouse tá dentro da BBox do obj
-        // foreach (Objeto obj in mundo.GetObjetosLista())
-        // {
-        //   if (obj.estaNaBbox(mousePoint)){
-        //     // rever a logica, não tá pegando os filhos
-        //     objetoSelecionado.shaderCor = _shaderBranca;
-        //     objetoSelecionado = obj;
-        //     objetoSelecionado.shaderCor = _shaderAmarela;
-        //   }
-        // }
+        for (var i=0; i <mundo.GetObjetosLista().Count; i++)
+        {
+          if (mundo.GetObjetosLista()[i].analisaBbox(mousePoint) != null){
+            objetoSelecionado = mundo.GetObjetosLista()[i].analisaBbox(mousePoint);
+            // visualizaBBox = true;
+
+            bbox = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(objetoSelecionado.Bbox().obterMenorX, objetoSelecionado.Bbox().obterMenorY), new Ponto4D(objetoSelecionado.Bbox().obterMaiorX, objetoSelecionado.Bbox().obterMaiorY));
+            bbox.shaderCor = _shaderAmarela;
+            bbox.PrimitivaTipo = PrimitiveType.LineLoop;
+
+            bboxPto = new Ponto(mundo, ref rotuloNovo, new Ponto4D(objetoSelecionado.Bbox().obterCentro));
+            bboxPto.shaderCor = _shaderAmarela;
+            bboxPto.PrimitivaTipo = PrimitiveType.Points;
+            bboxPto.PrimitivaTamanho = 10;
+          }
+        }
+
         //scanline
         bool resp = objetoSelecionado.VerificarInterseccao(mousePoint);
 
-
-        objetoSelecionado.shaderCor = _shaderBranca;
-        objetoSelecionado = mundo.GrafocenaBuscaProximo(objetoSelecionado);
-
-        // teste = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(objetoSelecionado.Bbox().obterMenorX, objetoSelecionado.Bbox().obterMaiorX), new Ponto4D(objetoSelecionado.Bbox().obterMenorY, objetoSelecionado.Bbox().obterMaiorY));
-        // teste.shaderCor = _shaderAmarela;
-        // teste.PrimitivaTipo = PrimitiveType.LineLoop;
       }
+      // if (visualizaBBox){
+      //   bbox = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(objetoSelecionado.Bbox().obterMenorX, objetoSelecionado.Bbox().obterMenorY), new Ponto4D(objetoSelecionado.Bbox().obterMaiorX, objetoSelecionado.Bbox().obterMaiorY));
+      //   bbox.shaderCor = _shaderAmarela;
+      //   bbox.PrimitivaTipo = PrimitiveType.LineLoop;
+
+      //   bboxPto = new Ponto(new Ponto4D(objetoSelecionado.Bbox().obterCentro));
+      //   bboxPto.shaderCor = _shaderAmarela;
+      //   bboxPto.PrimitivaTipo = PrimitiveType.Points;
+      //   bboxPto.Tamanho = 10;
+      // }
       if (input.IsKeyPressed(Keys.F))
         mundo.GrafocenaImprimir("");
       if (input.IsKeyPressed(Keys.P))
