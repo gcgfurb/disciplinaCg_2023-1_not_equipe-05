@@ -203,10 +203,11 @@ namespace gcgcg
       if (input.IsKeyDown(Keys.Escape))
         Close();
 
-      if (input.IsAnyKeyDown && !input.IsKeyDown(Keys.S)){
+      if (input.IsAnyKeyDown && !input.IsKeyDown(Keys.S)&& objetoSelecionado != null){
         if (temBbox){
           objetoSelecionado.FilhoRemover(bbox);
           mundo.FilhoRemover(bboxPto);
+          temBbox=false;
         }
       }
       if (input.IsKeyDown(Keys.Enter)) {
@@ -241,7 +242,9 @@ namespace gcgcg
             drawingPoligono.FilhoRemover(p);
           }
 
-          objetoSelecionado.shaderCor = _shaderBranca;
+          if (objetoSelecionado!=null){
+            objetoSelecionado.shaderCor = _shaderBranca;
+          }
           objetoSelecionado = newPoligono;
           drawingShape = false;
           mouseTrace = false;
@@ -250,16 +253,19 @@ namespace gcgcg
 
         
       }
-      if (input.IsKeyPressed(Keys.S) && objetoSelecionado != null)
+      if (input.IsKeyPressed(Keys.S))
       {
-        objetoSelecionado.shaderCor = _shaderBranca;
-        if (temBbox){
-          objetoSelecionado.FilhoRemover(bbox);
-          mundo.FilhoRemover(bboxPto);
+        if (objetoSelecionado!=null){
+          objetoSelecionado.shaderCor = _shaderBranca;
+          if (temBbox){
+            objetoSelecionado.FilhoRemover(bbox);
+            mundo.FilhoRemover(bboxPto);
+          }
         }
         // pega o ponto do mouse
         Ponto4D mousePoint = new Ponto4D(new Ponto4D(converteValorPonto(MousePosition.X, true), converteValorPonto(MousePosition.Y, false)));
         //vê se o mouse tá dentro da BBox do obj
+        objetoSelecionado = null;
         for (var i=0; i <mundo.GetObjetosLista().Count; i++)
         {
           if (mundo.GetObjetosLista()[i].analisaBbox(mousePoint) != null){
@@ -278,7 +284,7 @@ namespace gcgcg
         }
 
         //scanline
-        bool resp = objetoSelecionado.VerificarInterseccao(mousePoint);
+        // bool resp = objetoSelecionado.VerificarInterseccao(mousePoint);
 
       }
       // if (visualizaBBox){
@@ -293,7 +299,7 @@ namespace gcgcg
       // }
       if (input.IsKeyPressed(Keys.F))
         mundo.GrafocenaImprimir("");
-      if (input.IsKeyPressed(Keys.P))
+      if (input.IsKeyPressed(Keys.P) && objetoSelecionado != null)
         // abre e fecha polígono
         if (objetoSelecionado.PrimitivaTipo == PrimitiveType.LineLoop) objetoSelecionado.PrimitivaTipo = PrimitiveType.LineStrip;
         else if (objetoSelecionado.PrimitivaTipo == PrimitiveType.LineStrip) objetoSelecionado.PrimitivaTipo = PrimitiveType.LineLoop;
@@ -302,11 +308,11 @@ namespace gcgcg
       if (input.IsKeyPressed(Keys.M) && objetoSelecionado != null)
         objetoSelecionado.MatrizImprimir();
         // cores
-      if (input.IsKeyPressed(Keys.R))
+      if (input.IsKeyPressed(Keys.R)&& objetoSelecionado != null)
         objetoSelecionado.shaderCor = _shaderVermelha;
-      if (input.IsKeyPressed(Keys.B))
+      if (input.IsKeyPressed(Keys.B)&& objetoSelecionado != null)
         objetoSelecionado.shaderCor = _shaderAzul; 
-      if (input.IsKeyPressed(Keys.G))
+      if (input.IsKeyPressed(Keys.G)&& objetoSelecionado != null)
         objetoSelecionado.shaderCor = _shaderVerde;
       if (input.IsKeyPressed(Keys.D)){
         if(objetoSelecionado != null){
@@ -315,7 +321,7 @@ namespace gcgcg
         }
       }
         // remove vértices
-      if (input.IsKeyPressed(Keys.E)){
+      if (input.IsKeyPressed(Keys.E)&& objetoSelecionado != null){
         int janelaLargura = Size.X;
         int janelaAltura = Size.Y;
         Ponto4D mousePonto = new Ponto4D(MousePosition.X, MousePosition.Y);
