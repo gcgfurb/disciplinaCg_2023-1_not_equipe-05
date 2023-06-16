@@ -3,14 +3,24 @@ class Objeto {
     + Rotulo : char <<get>>
     + PrimitivaTamanho : float <<get>> <<set>>
     + Bbox() : BBox
+    + getListaPontos() : List<Ponto4D>
     + TrocaEixoRotacao(eixo:char) : void
     + Objeto(paiRef:Objeto, _rotulo:char, objetoFilho:Objeto)
     + ObjetoAtualizar() : void
+    + PontoMaisProximo(sruPonto:Ponto4D) : int
+    + analisaBbox(pto:Ponto4D) : Objeto
     + Desenhar(matrizGrafo:Transformacao4D) : void
+    + VerificarInterseccao(pto:Ponto4D) : bool
     + FilhoAdicionar(filho:Objeto) : void
+    + GetObjetosLista() : List<Objeto>
+    + GetObjetosLista(t:Type) : List<Objeto>
     + PontosId(id:int) : Ponto4D
     + PontosAdicionar(pto:Ponto4D) : void
+    + Deletar(filho:Objeto) : void
+    + FilhoRemover(filho:Objeto) : void
+    + EhVazio() : bool
     + PontosAlterar(pto:Ponto4D, posicao:int) : void
+    + PontoRemover(pto:Ponto4D) : void
     + GrafocenaBusca(_rotulo:char) : Objeto
     + GrafocenaBuscaProximo(objetoAtual:Objeto) : Objeto
     + GrafocenaImprimir(idt:String) : void

@@ -1,6 +1,7 @@
 @startuml
 class Mundo {
     + Mundo(gameWindowSettings:GameWindowSettings, nativeWindowSettings:NativeWindowSettings)
+    + converteValorPonto(coordenada:float, eixo:bool) : double
 }
 GameWindow <|-- Mundo
 @enduml

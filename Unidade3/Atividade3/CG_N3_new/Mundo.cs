@@ -322,11 +322,13 @@ namespace gcgcg
       }
         // remove vértices
       if (input.IsKeyPressed(Keys.E)&& objetoSelecionado != null){
-        int janelaLargura = Size.X;
-        int janelaAltura = Size.Y;
-        Ponto4D mousePonto = new Ponto4D(MousePosition.X, MousePosition.Y);
-        Ponto4D sruPonto = Utilitario.NDC_TelaSRU(janelaLargura, janelaAltura, mousePonto);
-        objetoSelecionado.PontoRemover(objetoSelecionado.PontosId(objetoSelecionado.PontoMaisProximo(sruPonto)));
+        if (objetoSelecionado.getListaPontos().Count > 2) {
+          int janelaLargura = Size.X;
+          int janelaAltura = Size.Y;
+          Ponto4D mousePonto = new Ponto4D(MousePosition.X, MousePosition.Y);
+          Ponto4D sruPonto = Utilitario.NDC_TelaSRU(janelaLargura, janelaAltura, mousePonto);
+          objetoSelecionado.PontoRemover(objetoSelecionado.PontosId(objetoSelecionado.PontoMaisProximo(sruPonto)));
+        }
       }
       //TODO: não está atualizando a BBox com as transformações geométricas
       if (input.IsKeyPressed(Keys.I) && objetoSelecionado != null)
