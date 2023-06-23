@@ -9,28 +9,60 @@ namespace gcgcg
 {
   internal class Cubo : Objeto
   {
-    // Vector3[] vertices;
+    Ponto4D[] vertices;
     // int[] indices;
     // Vector3[] normals;
     // int[] colors;
 
     public Cubo(Objeto paiRef, ref char _rotulo) :
       this(paiRef, ref _rotulo, new Ponto4D(-0.5, -0.5), new Ponto4D(0.5, 0.5))
-    { }
-
-    public Cubo(Objeto paiRef, ref char _rotulo, Ponto4D ptoInfEsq, Ponto4D ptoSupDir) : base(paiRef, ref _rotulo)
     {
-      // vertices = new Vector3[]
-      // {
-      //   new Vector3(-1.0f, -1.0f,  1.0f),
-      //   new Vector3( 1.0f, -1.0f,  1.0f),
-      //   new Vector3( 1.0f,  1.0f,  1.0f),
-      //   new Vector3(-1.0f,  1.0f,  1.0f),
-      //   new Vector3(-1.0f, -1.0f, -1.0f),
-      //   new Vector3( 1.0f, -1.0f, -1.0f),
-      //   new Vector3( 1.0f,  1.0f, -1.0f),
-      //   new Vector3(-1.0f,  1.0f, -1.0f)
-      // };
+      // PrimitivaTipo = PrimitiveType.TriangleFan;
+    }
+
+    public Cubo(Objeto paiRef, ref char _rotulo, Ponto4D ptoInfEsq, Ponto4D ptoSupDir) : base(paiRef, ref _rotulo) 
+    {
+      vertices = new Ponto4D[]
+      {
+        new Ponto4D(-0.3, -0.3,  0.3),
+        new Ponto4D( 0.3, -0.3,  0.3),
+        new Ponto4D( 0.3,  0.3,  0.3),
+        new Ponto4D(-0.3,  0.3,  0.3),
+        new Ponto4D(-0.3, -0.3, -0.3),
+        new Ponto4D( 0.3, -0.3, -0.3),
+        new Ponto4D( 0.3,  0.3, -0.3),
+        new Ponto4D(-0.3,  0.3, -0.3)
+      };
+
+      base.PontosAdicionar(vertices[0]);
+      base.PontosAdicionar(vertices[1]);
+      base.PontosAdicionar(vertices[2]);
+      base.PontosAdicionar(vertices[3]);
+
+      base.PontosAdicionar(vertices[3]);
+      base.PontosAdicionar(vertices[2]);
+      base.PontosAdicionar(vertices[6]);
+      base.PontosAdicionar(vertices[7]);
+
+      base.PontosAdicionar(vertices[7]);
+      base.PontosAdicionar(vertices[6]);
+      base.PontosAdicionar(vertices[5]);
+      base.PontosAdicionar(vertices[4]);
+
+      base.PontosAdicionar(vertices[4]);
+      base.PontosAdicionar(vertices[7]);
+      base.PontosAdicionar(vertices[3]);
+      base.PontosAdicionar(vertices[0]);
+
+      base.PontosAdicionar(vertices[0]);
+      base.PontosAdicionar(vertices[4]);
+      base.PontosAdicionar(vertices[5]);
+      base.PontosAdicionar(vertices[1]);
+      
+      base.PontosAdicionar(vertices[1]);
+      base.PontosAdicionar(vertices[2]);
+      base.PontosAdicionar(vertices[6]);
+      base.PontosAdicionar(vertices[2]);
 
       // indices = new int[]
       // {
@@ -67,10 +99,10 @@ namespace gcgcg
       // };
 
       // Sentido horário
-      base.PontosAdicionar(ptoInfEsq);
-      base.PontosAdicionar(new Ponto4D(ptoSupDir.X, ptoInfEsq.Y));
-      base.PontosAdicionar(ptoSupDir);
-      base.PontosAdicionar(new Ponto4D(ptoInfEsq.X, ptoSupDir.Y));
+      // base.PontosAdicionar(ptoInfEsq);
+      // base.PontosAdicionar(new Ponto4D(ptoSupDir.X, ptoInfEsq.Y));
+      // base.PontosAdicionar(ptoSupDir);
+      // base.PontosAdicionar(new Ponto4D(ptoInfEsq.X, ptoSupDir.Y));
       Atualizar();
     }
 
