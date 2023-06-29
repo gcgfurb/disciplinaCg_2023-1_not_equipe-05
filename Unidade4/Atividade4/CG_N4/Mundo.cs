@@ -156,6 +156,19 @@ namespace gcgcg
       SwapBuffers();
     }
 
+      public double converteValorPonto(float coordenada, bool eixo){
+      // coordenada vem um valor entre 0 e 800, tem que converter pra -1 até 1
+      // eixo true = x, eixo false = y
+      float convertido;
+      float inc = 0.0025f;
+      if (eixo){
+        convertido = -1+(inc*coordenada);
+      } else {
+        convertido = +1-(inc*coordenada);
+      }
+      return convertido;
+    }
+
     protected override void OnUpdateFrame(FrameEventArgs e)
     {
       base.OnUpdateFrame(e);
@@ -225,14 +238,23 @@ namespace gcgcg
         _camera.Position += _camera.Up * cameraSpeed * (float)e.Time; // Up
       if (input.IsKeyDown(Keys.LeftShift))
         _camera.Position -= _camera.Up * cameraSpeed * (float)e.Time; // Down
-      if (input.IsKeyDown(Keys.K))
-        _camera.Pitch += 0.05f;
-      if (input.IsKeyDown(Keys.I))
-        _camera.Pitch += -0.05f;
+      if (input.IsKeyDown(Keys.H))
+        _camera.Pitch += 0.5f;
+      if (input.IsKeyDown(Keys.Y))
+        _camera.Pitch += -0.5f;
+      if (input.IsKeyDown(Keys.G))
+        _camera.Yaw += 0.5f;
       if (input.IsKeyDown(Keys.J))
-        _camera.Yaw += 0.05f;
-      if (input.IsKeyDown(Keys.L))
-        _camera.Yaw += -0.05f;
+        _camera.Yaw += -0.5f;
+      // if (input.IsKeyDown(Keys.C)){
+      //   FOI PASSADO PRA PARTE DE MOUSE, EM MOUSE RELEASED LEFT-
+      //   _camera.Position = new Vector3(1.0f, 0.0f, 1.0f);
+      //   // _camera.Position += _camera.Front*(0.005f);
+      //   // _camera.Position += _camera.Right*(0.005f);
+      //   // _camera.Yaw += _camera.Yaw*();
+
+      //   //tentar usar o IsButtonReleased(MouseButton.Left)
+      // }
       #endregion
 
       #region  Mouse
@@ -243,6 +265,15 @@ namespace gcgcg
         System.Console.WriteLine("__ Valores do Espaço de Tela");
         System.Console.WriteLine("Vector2 mousePosition: " + MousePosition);
         System.Console.WriteLine("Vector2i windowSize: " + Size);
+      }
+      if (MouseState.IsButtonReleased(MouseButton.Left))
+      {
+        _camera.Position = new Vector3(1.0f, 0.0f, 1.0f);
+        _camera.Yaw += -30.0f;
+        // _camera.Position += _camera.Front*(0.005f);
+        // _camera.Position += _camera.Right*(0.005f);
+        
+        //tentar usar o IsButtonReleased(MouseButton.Left)
       }
       if (MouseState.IsButtonDown(MouseButton.Right) && objetoSelecionado != null)
       {
