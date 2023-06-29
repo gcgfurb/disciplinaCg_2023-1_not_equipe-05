@@ -239,28 +239,20 @@ namespace gcgcg
       if (input.IsKeyDown(Keys.LeftShift))
         _camera.Position -= _camera.Up * cameraSpeed * (float)e.Time; // Down
       if (input.IsKeyDown(Keys.H))
-        _camera.Pitch += 0.5f;
-      if (input.IsKeyDown(Keys.Y))
         _camera.Pitch += -0.5f;
+      if (input.IsKeyDown(Keys.Y))
+        _camera.Pitch += 0.5f;
       if (input.IsKeyDown(Keys.G))
-        _camera.Yaw += 0.5f;
-      if (input.IsKeyDown(Keys.J))
         _camera.Yaw += -0.5f;
-      // if (input.IsKeyDown(Keys.C)){
-      //   FOI PASSADO PRA PARTE DE MOUSE, EM MOUSE RELEASED LEFT-
-      //   _camera.Position = new Vector3(1.0f, 0.0f, 1.0f);
-      //   // _camera.Position += _camera.Front*(0.005f);
-      //   // _camera.Position += _camera.Right*(0.005f);
-      //   // _camera.Yaw += _camera.Yaw*();
-
-      //   //tentar usar o IsButtonReleased(MouseButton.Left)
-      // }
+      if (input.IsKeyDown(Keys.J))
+        _camera.Yaw += 0.5f;
       #endregion
 
       #region  Mouse
 
       if (MouseState.IsButtonPressed(MouseButton.Left))
       {
+
         System.Console.WriteLine("MouseState.IsButtonPressed(MouseButton.Left)");
         System.Console.WriteLine("__ Valores do Espaço de Tela");
         System.Console.WriteLine("Vector2 mousePosition: " + MousePosition);
@@ -268,8 +260,14 @@ namespace gcgcg
       }
       if (MouseState.IsButtonReleased(MouseButton.Left))
       {
-        _camera.Position = new Vector3(1.0f, 0.0f, 1.0f);
-        _camera.Yaw += -30.0f;
+        // vai pegar um angulo entre 0 e 270°
+        double anguloX = (MouseState.X - MouseState.PreviousX)*2.7;
+        _camera.AtualizarCamera(anguloX);
+        
+        // Ponto4D a = Matematica.GerarPtosCirculo(angulo, 3.0); 
+        // _camera.Position = new Vector3((float)a.X, 0.0f, (float)a.Z);
+        // _camera.Yaw += -(float)(angulo/10);
+        
         // _camera.Position += _camera.Front*(0.005f);
         // _camera.Position += _camera.Right*(0.005f);
         

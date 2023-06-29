@@ -62,7 +62,8 @@ namespace gcgcg
       base.PontosAdicionar(vertices[1]);
       base.PontosAdicionar(vertices[2]);
       base.PontosAdicionar(vertices[6]);
-      base.PontosAdicionar(vertices[2]);
+      base.PontosAdicionar(vertices[5]);
+
 
       // indices = new int[]
       // {
