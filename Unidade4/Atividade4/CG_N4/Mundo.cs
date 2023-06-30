@@ -30,57 +30,114 @@ namespace gcgcg
        0.0f,  0.0f, -0.5f, /* Z- */      0.0f,  0.0f,  0.5f  /* Z+ */
     };
 
-    // private readonly float[] _vertices = {
-    //     // Position         Texture coordinates
-    //     -0.3005f, -0.3005f,  0.3005f, 0.0f, 0.0f,
-    //      0.3005f, -0.3005f,  0.3005f, 1.0f, 0.0f,
-    //      0.3005f,  0.3005f,  0.3005f, 1.0f, 1.0f,
-    //     -0.3005f,  0.3005f,  0.3005f, 0.0f, 1.0f
-    //   };
-
       private readonly float[] _vertices = {
         // Position         Texture coordinates
         -0.3005f, -0.3005f,  0.3005f, 0.0f, 0.0f, // front
           0.3005f, -0.3005f,  0.3005f, 1.0f, 0.0f,
           0.3005f,  0.3005f,  0.3005f, 1.0f, 1.0f,
         -0.3005f,  0.3005f,  0.3005f, 0.0f, 1.0f,
+      //   -0.3005f, -0.3005f, -0.3005f, 0.0f, 0.0f, // back
+      //   0.3005f, -0.3005f, -0.3005f, 1.0f, 0.0f,
+      //   0.3005f,  0.3005f, -0.3005f, 1.0f, 1.0f,
+      //   -0.3005f,  0.3005f, -0.3005f, 0.0f, 1.0f,
+      //   -0.3005f, 0.3005f,  0.3005f, 0.0f, 0.0f, // top
+      //   0.3005f, 0.3005f,  -0.3005f, 1.0f, 1.0f,
+      //   0.3005f, 0.3005f,  0.3005f, 1.0f, 0.0f,
+      //   -0.3005f, 0.3005f, -0.3005f, 0.0f, 1.0f,
+      //   0.3005f, -0.3005f,  -0.3005f, 0.0f, 0.0f, // bottom
+      //   -0.3005f, -0.3005f,  0.3005f, 1.0f, 1.0f,
+      //   -0.3005f, -0.3005f,  -0.3005f, 1.0f, 0.0f,
+      //   0.3005f, -0.3005f, 0.3005f, 0.0f, 1.0f,
+      //   0.3005f, -0.3005f, -0.3005f, 0.0f, 0.0f, //right
+      //   0.3005f, 0.3005f, 0.3005f, 1.0f, 1.0f,
+      //   0.3005f, -0.3005f, 0.3005f, 1.0f, 0.0f,
+      //   0.3005f, 0.3005f, -0.3005f, 0.0f, 1.0f,
+      //  -0.3005f, -0.3005f, 0.3005f, 0.0f, 0.0f, //left
+      //  -0.3005f, 0.3005f, -0.3005f, 1.0f, 1.0f,
+      //  -0.3005f, -0.3005f, -0.3005f, 1.0f, 0.0f,
+      //  -0.3005f, 0.3005f, 0.3005f, 0.0f, 1.0f,
+    };
+      private readonly float[] _vertices2 = {
+        // Position         Texture coordinates
         -0.3005f, -0.3005f, -0.3005f, 0.0f, 0.0f, // back
         0.3005f, -0.3005f, -0.3005f, 1.0f, 0.0f,
         0.3005f,  0.3005f, -0.3005f, 1.0f, 1.0f,
-        -0.3005f,  0.3005f, -0.3005f, 0.0f, 1.0f,
+        -0.3005f,  0.3005f, -0.3005f, 0.0f, 1.0f
+      };
+      private readonly float[] _vertices3 = {
+        // Position         Texture coordinates
         -0.3005f, 0.3005f,  0.3005f, 0.0f, 0.0f, // top
         0.3005f, 0.3005f,  -0.3005f, 1.0f, 1.0f,
         0.3005f, 0.3005f,  0.3005f, 1.0f, 0.0f,
-        -0.3005f, 0.3005f, -0.3005f, 0.0f, 1.0f,
+        -0.3005f, 0.3005f, -0.3005f, 0.0f, 1.0f
+      };
+
+      private readonly float[] _vertices4 = {
+        // Position         Texture coordinates
         0.3005f, -0.3005f,  -0.3005f, 0.0f, 0.0f, // bottom
         -0.3005f, -0.3005f,  0.3005f, 1.0f, 1.0f,
         -0.3005f, -0.3005f,  -0.3005f, 1.0f, 0.0f,
-        0.3005f, -0.3005f, 0.3005f, 0.0f, 1.0f,
+        0.3005f, -0.3005f, 0.3005f, 0.0f, 1.0f
+      };
+
+      private readonly float[] _vertices5 = {
+        // Position         Texture coordinates
         0.3005f, -0.3005f, -0.3005f, 0.0f, 0.0f, //right
         0.3005f, 0.3005f, 0.3005f, 1.0f, 1.0f,
         0.3005f, -0.3005f, 0.3005f, 1.0f, 0.0f,
-        0.3005f, 0.3005f, -0.3005f, 0.0f, 1.0f,
+        0.3005f, 0.3005f, -0.3005f, 0.0f, 1.0f
+      };
+
+      private readonly float[] _vertices6 = {
+        // Position         Texture coordinates
        -0.3005f, -0.3005f, 0.3005f, 0.0f, 0.0f, //left
        -0.3005f, 0.3005f, -0.3005f, 1.0f, 1.0f,
        -0.3005f, -0.3005f, -0.3005f, 1.0f, 0.0f,
-       -0.3005f, 0.3005f, 0.3005f, 0.0f, 1.0f,
-    };
+       -0.3005f, 0.3005f, 0.3005f, 0.0f, 1.0f
+      };
+
     private readonly uint[] _indices =
     {
         1, 2, 3,
         0, 1, 3,
-        5, 6, 7,
-        4, 5, 7,
-        11, 8, 9,
-        8, 10, 9,
-        15, 12, 13,
-        12, 14, 13,
-        17, 16, 18,
-        19, 16, 17,
-        21, 20, 22,
-        23, 20, 21
+        // 5, 6, 7,
+        // 4, 5, 7,
+        // 11, 8, 9,
+        // 8, 10, 9,
+        // 15, 12, 13,
+        // 12, 14, 13,
+        // 17, 16, 18,
+        // 19, 16, 17,
+        // 21, 20, 22,
+        // 23, 20, 21
     };
 
+    private readonly uint[] _indices2 =
+    {
+        1, 2, 3,
+        0, 1, 3
+    };
+
+    private readonly uint[] _indices3 =
+    {
+        3, 0, 1,
+        0, 2, 1
+    };
+    private readonly uint[] _indices4 =
+    {
+        3, 0, 1,
+        0, 2, 1
+    };
+    private readonly uint[] _indices5 =
+    {
+        1, 0, 2,
+        3, 0, 1
+    };
+    private readonly uint[] _indices6 =
+    {
+        1, 0, 2,
+        3, 0, 1
+    };
     private int _vertexBufferObject_sruEixos;
     private int _vertexArrayObject_sruEixos;
 
@@ -92,6 +149,11 @@ namespace gcgcg
     double anguloY;
 
     private Shader _shader;
+    private Shader _shader2;
+    private Shader _shader3;
+    private Shader _shader4;
+    private Shader _shader5;
+    private Shader _shader6;
     private Shader _shaderBranca;
     private Shader _shaderVermelha;
     private Shader _shaderVerde;
@@ -108,6 +170,21 @@ namespace gcgcg
     private int _vertexBufferObject_texture;
     private int _vertexArrayObject_texture;
     private int _elementBufferObject_texture;
+    private int _vertexBufferObject_texture2;
+    private int _vertexArrayObject_texture2;
+    private int _elementBufferObject_texture2;
+    private int _vertexBufferObject_texture3;
+    private int _vertexArrayObject_texture3;
+    private int _elementBufferObject_texture3;
+    private int _vertexBufferObject_texture4;
+    private int _vertexArrayObject_texture4;
+    private int _elementBufferObject_texture4;
+    private int _vertexBufferObject_texture5;
+    private int _vertexArrayObject_texture5;
+    private int _elementBufferObject_texture5;
+    private int _vertexBufferObject_texture6;
+    private int _vertexArrayObject_texture6;
+    private int _elementBufferObject_texture6;
     private List<Ponto4D> verticesCubo;
 
     private Camera _camera;
@@ -164,37 +241,6 @@ namespace gcgcg
       _shaderAmarela = new Shader("Shaders/shader.vert", "Shaders/shaderAmarela.frag");
       #endregion
 
-      #region Texturas
-
-      GL.Enable(EnableCap.Texture2D);
-      _vertexArrayObject_texture = GL.GenVertexArray();
-      GL.BindVertexArray(_vertexArrayObject_texture);
-
-      _vertexBufferObject_texture = GL.GenBuffer();
-      GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject_texture);
-      GL.BufferData(BufferTarget.ArrayBuffer, _vertices.Length * sizeof(float), _vertices, BufferUsageHint.StaticDraw);
-
-      _elementBufferObject_texture = GL.GenBuffer();
-      GL.BindBuffer(BufferTarget.ElementArrayBuffer, _elementBufferObject_texture);
-      GL.BufferData(BufferTarget.ElementArrayBuffer, _indices.Length * sizeof(uint), _indices, BufferUsageHint.StaticDraw);
-
-      _shader = new Shader("Shaders/shader_texture.vert", "Shaders/shader_texture.frag");
-      _shader.Use();
-
-      var vertexLocation = _shader.GetAttribLocation("aPosition");
-      GL.EnableVertexAttribArray(vertexLocation);
-      GL.VertexAttribPointer(vertexLocation, 3, VertexAttribPointerType.Float, false, 5 * sizeof(float), 0);
-
-      var texCoordLocation = _shader.GetAttribLocation("aTexCoord");
-      GL.EnableVertexAttribArray(texCoordLocation);
-      GL.VertexAttribPointer(texCoordLocation, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), 3 * sizeof(float));
-
-      _texture = Texture.LoadFromFile("Resources/all.jpg");
-      _texture.Use(TextureUnit.Texture0);
-
-
-      #endregion
-
       #region Eixos: SRU  
       _vertexBufferObject_sruEixos = GL.GenBuffer();
       GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject_sruEixos);
@@ -235,25 +281,198 @@ namespace gcgcg
 
       #region Objeto: Cubo
       objetoSelecionado = new Cubo(mundo, ref rotuloNovo);
-      objetoSelecionado.shaderCor = _shader;
+      objetoSelecionado.shaderCor = _shaderVermelha;
       objetoSelecionado.PrimitivaTipo = PrimitiveType.TriangleFan;
+      #endregion
 
+      #region Front Texture
       verticesCubo = objetoSelecionado.getListaPontos();
-      // List<Ponto4D> front = front.Add(verticesCubo[0]);
+      GL.Enable(EnableCap.Texture2D);
+      _vertexArrayObject_texture = GL.GenVertexArray();
+      GL.BindVertexArray(_vertexArrayObject_texture);
 
-      Retangulo front = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(-0.3, -0.3, 0.301), new Ponto4D(0.3, 0.3, 0.301), false);
-      front.shaderCor = _shaderCiano;
-      Retangulo back = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(-0.3, -0.3, -0.301), new Ponto4D(0.3, 0.3, -0.301), false);
-      back.shaderCor = _shaderCiano;
-      Retangulo right = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(0.301, -0.3, -0.3), new Ponto4D(0.301, 0.3, 0.3), true);
-      right.shaderCor = _shaderCiano;
-      Retangulo left = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(-0.301, -0.3, -0.3), new Ponto4D(-0.301, 0.3, 0.3), true);
-      left.shaderCor = _shaderCiano;
-      Retangulo bottom = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(-0.3, -0.301, -0.3), new Ponto4D(0.3, -0.301, 0.3), false);
-      bottom.shaderCor = _shaderCiano;
-      Retangulo up = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(-0.3, 0.301, -0.3), new Ponto4D(0.3, 0.301, 0.3), false);
-      up.shaderCor = _shaderCiano;
+      _vertexBufferObject_texture = GL.GenBuffer();
+      GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject_texture);
+      GL.BufferData(BufferTarget.ArrayBuffer, _vertices.Length * sizeof(float), _vertices, BufferUsageHint.StaticDraw);
 
+      _elementBufferObject_texture = GL.GenBuffer();
+      GL.BindBuffer(BufferTarget.ElementArrayBuffer, _elementBufferObject_texture);
+      GL.BufferData(BufferTarget.ElementArrayBuffer, _indices.Length * sizeof(uint), _indices, BufferUsageHint.StaticDraw);
+
+      _shader = new Shader("Shaders/shader_texture.vert", "Shaders/shader_texture.frag");
+      _shader.Use();
+
+      var vertexLocation = _shader.GetAttribLocation("aPosition");
+      GL.EnableVertexAttribArray(vertexLocation);
+      GL.VertexAttribPointer(vertexLocation, 3, VertexAttribPointerType.Float, false, 5 * sizeof(float), 0);
+
+      var texCoordLocation = _shader.GetAttribLocation("aTexCoord");
+      GL.EnableVertexAttribArray(texCoordLocation);
+      GL.VertexAttribPointer(texCoordLocation, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), 3 * sizeof(float));
+
+      _texture = Texture.LoadFromFile("Resources/all.jpg");
+      _texture.Use(TextureUnit.Texture0);
+
+      Retangulo front = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(-0.3, -0.3, 0.3), new Ponto4D(0.3, 0.3, 0.3), false);
+      front.shaderCor = _shader;
+
+      #endregion
+
+      #region Back Texture
+      GL.Enable(EnableCap.Texture2D);
+      _vertexArrayObject_texture2 = GL.GenVertexArray();
+      GL.BindVertexArray(_vertexArrayObject_texture2);
+
+      _vertexBufferObject_texture2 = GL.GenBuffer();
+      GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject_texture2);
+      GL.BufferData(BufferTarget.ArrayBuffer, _vertices2.Length * sizeof(float), _vertices2, BufferUsageHint.StaticDraw);
+
+      _elementBufferObject_texture2 = GL.GenBuffer();
+      GL.BindBuffer(BufferTarget.ElementArrayBuffer, _elementBufferObject_texture2);
+      GL.BufferData(BufferTarget.ElementArrayBuffer, _indices2.Length * sizeof(uint), _indices2, BufferUsageHint.StaticDraw);
+
+      _shader2 = new Shader("Shaders/shader_texture.vert", "Shaders/shader_texture.frag");
+      _shader2.Use();
+
+      var vertexLocation2 = _shader2.GetAttribLocation("aPosition");
+      GL.EnableVertexAttribArray(vertexLocation);
+      GL.VertexAttribPointer(vertexLocation, 3, VertexAttribPointerType.Float, false, 5 * sizeof(float), 0);
+
+      var texCoordLocation2 = _shader2.GetAttribLocation("aTexCoord");
+      GL.EnableVertexAttribArray(texCoordLocation);
+      GL.VertexAttribPointer(texCoordLocation, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), 3 * sizeof(float));
+
+      _texture2 = Texture.LoadFromFile("Resources/natalia.jpg");
+      _texture2.Use(TextureUnit.Texture0);
+
+      Retangulo back = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(-0.3, -0.3, -0.3), new Ponto4D(0.3, 0.3, -0.3), false);
+      back.shaderCor = _shader2;
+      #endregion
+
+      #region Top Texture
+      GL.Enable(EnableCap.Texture2D);
+      _vertexArrayObject_texture3 = GL.GenVertexArray();
+      GL.BindVertexArray(_vertexArrayObject_texture3);
+
+      _vertexBufferObject_texture3 = GL.GenBuffer();
+      GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject_texture3);
+      GL.BufferData(BufferTarget.ArrayBuffer, _vertices3.Length * sizeof(float), _vertices3, BufferUsageHint.StaticDraw);
+
+      _elementBufferObject_texture3 = GL.GenBuffer();
+      GL.BindBuffer(BufferTarget.ElementArrayBuffer, _elementBufferObject_texture3);
+      GL.BufferData(BufferTarget.ElementArrayBuffer, _indices3.Length * sizeof(uint), _indices3, BufferUsageHint.StaticDraw);
+
+      _shader3 = new Shader("Shaders/shader_texture.vert", "Shaders/shader_texture.frag");
+      _shader3.Use();
+
+      var vertexLocation3 = _shader3.GetAttribLocation("aPosition");
+      GL.EnableVertexAttribArray(vertexLocation);
+      GL.VertexAttribPointer(vertexLocation, 3, VertexAttribPointerType.Float, false, 5 * sizeof(float), 0);
+
+      var texCoordLocation3 = _shader3.GetAttribLocation("aTexCoord");
+      GL.EnableVertexAttribArray(texCoordLocation);
+      GL.VertexAttribPointer(texCoordLocation, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), 3 * sizeof(float));
+
+      _texture3 = Texture.LoadFromFile("Resources/matheus.jpg");
+      _texture3.Use(TextureUnit.Texture0);
+
+      Retangulo top = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(-0.3, 0.3, -0.3), new Ponto4D(0.3, 0.3, 0.3), false);
+      top.shaderCor = _shader3;
+
+      #endregion
+
+      #region Bottom Texture
+      GL.Enable(EnableCap.Texture2D);
+      _vertexArrayObject_texture4 = GL.GenVertexArray();
+      GL.BindVertexArray(_vertexArrayObject_texture4);
+
+      _vertexBufferObject_texture4 = GL.GenBuffer();
+      GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject_texture4);
+      GL.BufferData(BufferTarget.ArrayBuffer, _vertices4.Length * sizeof(float), _vertices4, BufferUsageHint.StaticDraw);
+
+      _elementBufferObject_texture4 = GL.GenBuffer();
+      GL.BindBuffer(BufferTarget.ElementArrayBuffer, _elementBufferObject_texture4);
+      GL.BufferData(BufferTarget.ElementArrayBuffer, _indices4.Length * sizeof(uint), _indices4, BufferUsageHint.StaticDraw);
+
+      _shader4 = new Shader("Shaders/shader_texture.vert", "Shaders/shader_texture.frag");
+      _shader4.Use();
+
+      var vertexLocation4 = _shader4.GetAttribLocation("aPosition");
+      GL.EnableVertexAttribArray(vertexLocation);
+      GL.VertexAttribPointer(vertexLocation, 3, VertexAttribPointerType.Float, false, 5 * sizeof(float), 0);
+
+      var texCoordLocation4 = _shader4.GetAttribLocation("aTexCoord");
+      GL.EnableVertexAttribArray(texCoordLocation);
+      GL.VertexAttribPointer(texCoordLocation, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), 3 * sizeof(float));
+
+      _texture4 = Texture.LoadFromFile("Resources/matheus2.png");
+      _texture4.Use(TextureUnit.Texture0);
+
+      Retangulo bottom = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(-0.3, -0.3, -0.3), new Ponto4D(0.3, -0.3, 0.3), false);
+      bottom.shaderCor = _shader4;
+
+      #endregion
+
+      #region Right Texture
+      GL.Enable(EnableCap.Texture2D);
+      _vertexArrayObject_texture5 = GL.GenVertexArray();
+      GL.BindVertexArray(_vertexArrayObject_texture5);
+
+      _vertexBufferObject_texture5 = GL.GenBuffer();
+      GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject_texture5);
+      GL.BufferData(BufferTarget.ArrayBuffer, _vertices5.Length * sizeof(float), _vertices5, BufferUsageHint.StaticDraw);
+
+      _elementBufferObject_texture5 = GL.GenBuffer();
+      GL.BindBuffer(BufferTarget.ElementArrayBuffer, _elementBufferObject_texture5);
+      GL.BufferData(BufferTarget.ElementArrayBuffer, _indices5.Length * sizeof(uint), _indices5, BufferUsageHint.StaticDraw);
+
+      _shader5 = new Shader("Shaders/shader_texture.vert", "Shaders/shader_texture.frag");
+      _shader5.Use();
+
+      var vertexLocation5 = _shader5.GetAttribLocation("aPosition");
+      GL.EnableVertexAttribArray(vertexLocation);
+      GL.VertexAttribPointer(vertexLocation, 3, VertexAttribPointerType.Float, false, 5 * sizeof(float), 0);
+
+      var texCoordLocation5 = _shader5.GetAttribLocation("aTexCoord");
+      GL.EnableVertexAttribArray(texCoordLocation);
+      GL.VertexAttribPointer(texCoordLocation, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), 3 * sizeof(float));
+
+      _texture5 = Texture.LoadFromFile("Resources/paulo.png");
+      _texture5.Use(TextureUnit.Texture0);
+
+      Retangulo right = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(0.3, -0.3, -0.3), new Ponto4D(0.3, 0.3, 0.3), true);
+      right.shaderCor = _shader5;
+      #endregion
+    
+      #region Left Texture
+      GL.Enable(EnableCap.Texture2D);
+      _vertexArrayObject_texture6 = GL.GenVertexArray();
+      GL.BindVertexArray(_vertexArrayObject_texture6);
+
+      _vertexBufferObject_texture6 = GL.GenBuffer();
+      GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject_texture6);
+      GL.BufferData(BufferTarget.ArrayBuffer, _vertices6.Length * sizeof(float), _vertices6, BufferUsageHint.StaticDraw);
+
+      _elementBufferObject_texture6 = GL.GenBuffer();
+      GL.BindBuffer(BufferTarget.ElementArrayBuffer, _elementBufferObject_texture5);
+      GL.BufferData(BufferTarget.ElementArrayBuffer, _indices6.Length * sizeof(uint), _indices6, BufferUsageHint.StaticDraw);
+
+      _shader6 = new Shader("Shaders/shader_texture.vert", "Shaders/shader_texture.frag");
+      _shader6.Use();
+
+      var vertexLocation6 = _shader6.GetAttribLocation("aPosition");
+      GL.EnableVertexAttribArray(vertexLocation);
+      GL.VertexAttribPointer(vertexLocation, 3, VertexAttribPointerType.Float, false, 5 * sizeof(float), 0);
+
+      var texCoordLocation6 = _shader6.GetAttribLocation("aTexCoord");
+      GL.EnableVertexAttribArray(texCoordLocation);
+      GL.VertexAttribPointer(texCoordLocation, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), 3 * sizeof(float));
+
+      _texture6 = Texture.LoadFromFile("Resources/joao.png");
+      _texture6.Use(TextureUnit.Texture0);
+
+      Retangulo left = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(-0.3, -0.3, -0.3), new Ponto4D(-0.3, 0.3, 0.3), true);
+      left.shaderCor = _shader6;
 
       #endregion
 
@@ -271,18 +490,67 @@ namespace gcgcg
       GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
       mundo.Desenhar(new Transformacao4D(), _camera);
-      #region drawImageFront
+      #region drawFrontTexture
       
       GL.BindVertexArray(_vertexArrayObject_texture);
 
       _texture.Use(TextureUnit.Texture0);
       _shader.Use();
       GL.DrawElements(PrimitiveType.Triangles, _indices.Length, DrawElementsType.UnsignedInt, 0);
-      GL.DrawElements(PrimitiveType.Points, _indices.Length, DrawElementsType.UnsignedInt, 0);
 
       #endregion
 
+      #region drawBackTexture
       
+      GL.BindVertexArray(_vertexArrayObject_texture2);
+
+      _texture2.Use(TextureUnit.Texture0);
+      _shader2.Use();
+      GL.DrawElements(PrimitiveType.Triangles, _indices2.Length, DrawElementsType.UnsignedInt, 0);
+
+      #endregion
+
+      #region drawTopTexture
+      
+      GL.BindVertexArray(_vertexArrayObject_texture3);
+
+      _texture3.Use(TextureUnit.Texture0);
+      _shader3.Use();
+      GL.DrawElements(PrimitiveType.Triangles, _indices3.Length, DrawElementsType.UnsignedInt, 0);
+
+      #endregion
+
+      #region drawBottomTexture
+      
+      GL.BindVertexArray(_vertexArrayObject_texture4);
+
+      _texture4.Use(TextureUnit.Texture0);
+      _shader4.Use();
+      GL.DrawElements(PrimitiveType.Triangles, _indices4.Length, DrawElementsType.UnsignedInt, 0);
+
+      #endregion
+
+      #region drawRightTexture
+      
+      GL.BindVertexArray(_vertexArrayObject_texture5);
+
+      _texture5.Use(TextureUnit.Texture0);
+      _shader5.Use();
+      GL.DrawElements(PrimitiveType.Triangles, _indices5.Length, DrawElementsType.UnsignedInt, 0);
+
+      #endregion
+
+      #region drawLeftTexture
+      
+      GL.BindVertexArray(_vertexArrayObject_texture6);
+
+      _texture6.Use(TextureUnit.Texture0);
+      _shader6.Use();
+      GL.DrawElements(PrimitiveType.Triangles, _indices6.Length, DrawElementsType.UnsignedInt, 0);
+
+      #endregion
+
+
 
 #if CG_Gizmo      
       Gizmo_Sru3D();
@@ -316,10 +584,12 @@ namespace gcgcg
       {
         if (objetoSelecionado == null)
           objetoSelecionado = mundo;
-        if (objetoSelecionado.shaderCor != _shader)
+        if (objetoSelecionado.shaderCor != _shader && objetoSelecionado.shaderCor != _shader2 && objetoSelecionado.shaderCor != _shader3 && objetoSelecionado.shaderCor != _shader4 && objetoSelecionado.shaderCor != _shader5 && objetoSelecionado.shaderCor != _shader6)
           objetoSelecionado.shaderCor = _shaderBranca;
-        objetoSelecionado = mundo.GrafocenaBuscaProximo(objetoSelecionado);
-        if (objetoSelecionado.shaderCor != _shader)
+        Objeto proximo = mundo.GrafocenaBuscaProximo(objetoSelecionado);
+        if (proximo.shaderCor!= _shader && proximo.shaderCor != _shader2 && proximo.shaderCor != _shader3 && proximo.shaderCor != _shader4 && proximo.shaderCor != _shader5 && proximo.shaderCor != _shader6)
+          objetoSelecionado = mundo.GrafocenaBuscaProximo(proximo);
+        if (objetoSelecionado.shaderCor != _shader && objetoSelecionado.shaderCor != _shader2 && objetoSelecionado.shaderCor != _shader3 && objetoSelecionado.shaderCor != _shader4 && objetoSelecionado.shaderCor != _shader5 && objetoSelecionado.shaderCor != _shader6)
           objetoSelecionado.shaderCor = _shaderAmarela;
       }
       if (input.IsKeyPressed(Keys.G))

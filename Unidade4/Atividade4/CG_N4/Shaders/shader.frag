@@ -10,6 +10,7 @@ in vec2 texCoord;
 // Multiple samplers will be demonstrated in section 1.5.
 uniform sampler2D texture0;
 
+
 void main()
 {
     // To use a texture, you call the texture() function.
