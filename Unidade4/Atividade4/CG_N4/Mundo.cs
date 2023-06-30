@@ -30,26 +30,55 @@ namespace gcgcg
        0.0f,  0.0f, -0.5f, /* Z- */      0.0f,  0.0f,  0.5f  /* Z+ */
     };
 
-    private readonly float[] _vertices = {
+    // private readonly float[] _vertices = {
+    //     // Position         Texture coordinates
+    //     -0.3f, -0.3f,  0.3005f, 0.0f, 0.0f,
+    //      0.3f, -0.3f,  0.3005f, 1.0f, 0.0f,
+    //      0.3f,  0.3f,  0.3005f, 1.0f, 1.0f,
+    //     -0.3f,  0.3f,  0.3005f, 0.0f, 1.0f
+    //   };
+
+      private readonly float[] _vertices = {
         // Position         Texture coordinates
-        -0.3f, -0.3f,  0.305f, 0.0f, 0.0f,
-         0.3f, -0.3f,  0.305f, 1.0f, 0.0f,
-         0.3f,  0.3f,  0.305f, 1.0f, 1.0f,
-        -0.3f,  0.3f,  0.305f, 0.0f, 1.0f
-      };
-
-    private readonly float[] _vertices2 = {
-      // Position         Texture coordinates
-      -0.3f, -0.3f, -0.3f, 0.0f, 0.0f,
-       0.3f, -0.3f, -0.3f, 1.0f, 0.0f,
-       0.3f,  0.3f, -0.3f, 1.0f, 1.0f,
-      -0.3f,  0.3f, -0.3f, 0.0f, 1.0f
+        -0.3f, -0.3f,  0.3005f, 0.0f, 0.0f, // front
+          0.3f, -0.3f,  0.3005f, 1.0f, 0.0f,
+          0.3f,  0.3f,  0.3005f, 1.0f, 1.0f,
+        -0.3f,  0.3f,  0.3005f, 0.0f, 1.0f,
+        -0.3f, -0.3f, -0.3f, 0.0f, 0.0f, // back
+        0.3f, -0.3f, -0.3f, 1.0f, 0.0f,
+        0.3f,  0.3f, -0.3f, 1.0f, 1.0f,
+        -0.3f,  0.3f, -0.3f, 0.0f, 1.0f,
+        -0.3f, 0.3005f,  0.3005f, 0.0f, 0.0f, // top
+        0.3f, 0.3005f,  -0.3005f, 1.0f, 1.0f,
+        0.3f, 0.3005f,  0.3005f, 1.0f, 0.0f,
+        -0.3f, 0.3005f, -0.3f, 0.0f, 1.0f,
+        0.3f, -0.3005f,  -0.3005f, 0.0f, 0.0f, // bottom
+        -0.3f, -0.3005f,  0.3005f, 1.0f, 1.0f,
+        -0.3f, -0.3005f,  -0.3005f, 1.0f, 0.0f,
+        0.3f, -0.3005f, 0.3f, 0.0f, 1.0f,
+        0.3005f, -0.3005f, -0.3005f, 0.0f, 0.0f, //right
+        0.3005f, 0.3005f, 0.3005f, 1.0f, 1.0f,
+        0.3005f, -0.3005f, 0.3005f, 1.0f, 0.0f,
+        0.3005f, 0.3005f, -0.3005f, 0.0f, 1.0f,
+       -0.3005f, -0.3005f, 0.3005f, 0.0f, 0.0f, //left
+       -0.3005f, 0.3005f, -0.3005f, 1.0f, 1.0f,
+       -0.3005f, -0.3005f, -0.3005f, 1.0f, 0.0f,
+       -0.3005f, 0.3005f, 0.3005f, 0.0f, 1.0f,
     };
-
     private readonly uint[] _indices =
     {
         1, 2, 3,
-        0, 1, 3
+        0, 1, 3,
+        5, 6, 7,
+        4, 5, 7,
+        11, 8, 9,
+        8, 10, 9,
+        15, 12, 13,
+        12, 14, 13,
+        17, 16, 18,
+        19, 16, 17,
+        21, 20, 22,
+        23, 20, 21
     };
 
     private int _vertexBufferObject_sruEixos;
@@ -147,7 +176,7 @@ namespace gcgcg
       // };
 
 
-
+      GL.Enable(EnableCap.Texture2D);
       _vertexArrayObject_texture = GL.GenVertexArray();
       GL.BindVertexArray(_vertexArrayObject_texture);
 
@@ -159,19 +188,13 @@ namespace gcgcg
       GL.BindBuffer(BufferTarget.ElementArrayBuffer, _elementBufferObject_texture);
       GL.BufferData(BufferTarget.ElementArrayBuffer, _indices.Length * sizeof(uint), _indices, BufferUsageHint.StaticDraw);
 
-      // The shaders have been modified to include the texture coordinates, check them out after finishing the OnLoad function.
       _shader = new Shader("Shaders/shader_texture.vert", "Shaders/shader_texture.frag");
       _shader.Use();
-      // Because there's now 5 floats between the start of the first vertex and the start of the second,
-      // we modify the stride from 3 * sizeof(float) to 5 * sizeof(float).
-      // This will now pass the new vertex array to the buffer.
+
       var vertexLocation = _shader.GetAttribLocation("aPosition");
       GL.EnableVertexAttribArray(vertexLocation);
       GL.VertexAttribPointer(vertexLocation, 3, VertexAttribPointerType.Float, false, 5 * sizeof(float), 0);
 
-      // Next, we also setup texture coordinates. It works in much the same way.
-      // We add an offset of 3, since the texture coordinates comes after the position data.
-      // We also change the amount of data to 2 because there's only 2 floats for texture coordinates.
       var texCoordLocation = _shader.GetAttribLocation("aTexCoord");
       GL.EnableVertexAttribArray(texCoordLocation);
       GL.VertexAttribPointer(texCoordLocation, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), 3 * sizeof(float));
