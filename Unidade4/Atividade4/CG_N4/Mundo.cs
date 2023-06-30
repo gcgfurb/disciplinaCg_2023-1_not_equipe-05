@@ -241,18 +241,18 @@ namespace gcgcg
       // verticesCubo = objetoSelecionado.getListaPontos();
       // List<Ponto4D> front = front.Add(verticesCubo[0])
 
-      Retangulo front = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(-0.3, -0.3, 0.301), new Ponto4D(0.3, 0.3, 0.301));
+      Retangulo front = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(-0.3, -0.3, 0.301), new Ponto4D(0.3, 0.3, 0.301), false);
       front.shaderCor = _shaderCiano;
-      Retangulo back = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(-0.3, -0.3, -0.301), new Ponto4D(0.3, 0.3, -0.301));
+      Retangulo back = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(-0.3, -0.3, -0.301), new Ponto4D(0.3, 0.3, -0.301), false);
       back.shaderCor = _shaderCiano;
-      Retangulo right = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(0.301, -0.3, -0.3), new Ponto4D(0.301, 0.3, 0.3));
+      Retangulo right = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(0.301, -0.3, -0.3), new Ponto4D(0.301, 0.3, 0.3), true);
       right.shaderCor = _shaderCiano;
-      Retangulo left = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(-0.301, -0.3, -0.3), new Ponto4D(-0.301, 0.3, 0.3));
+      Retangulo left = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(-0.301, -0.3, -0.3), new Ponto4D(-0.301, 0.3, 0.3), true);
       left.shaderCor = _shaderCiano;
-      // Retangulo bottom = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(0.3, 0.301, -0.3), new Ponto4D(-0.3, 0.301, 0.3));
-      // bottom.shaderCor = _shaderCiano;
-      // Retangulo up = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(-0.3, -0.3, 0.3), new Ponto4D(0.3, 0.3, 0.3));
-      // up.shaderCor = _shaderCiano;
+      Retangulo bottom = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(-0.3, -0.301, -0.3), new Ponto4D(0.3, -0.301, 0.3), false);
+      bottom.shaderCor = _shaderCiano;
+      Retangulo up = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(-0.3, 0.301, -0.3), new Ponto4D(0.3, 0.301, 0.3), false);
+      up.shaderCor = _shaderCiano;
 
 
       #endregion
