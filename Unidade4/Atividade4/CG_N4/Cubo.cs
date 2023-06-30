@@ -22,6 +22,18 @@ namespace gcgcg
 
     public Cubo(Objeto paiRef, ref char _rotulo, Ponto4D ptoInfEsq, Ponto4D ptoSupDir) : base(paiRef, ref _rotulo) 
     {
+
+      float[] _vertices = {
+        -0.3f, -0.3f,  0.3f,
+         0.3f, -0.3f,  0.3f,
+         0.3f,  0.3f,  0.3f,
+        -0.3f,  0.3f,  0.3f,
+        -0.3f, -0.3f, -0.3f,
+         0.3f, -0.3f, -0.3f,
+         0.3f,  0.3f, -0.3f,
+        -0.3f,  0.3f, -0.3f
+      };
+      
       vertices = new Ponto4D[]
       {
         new Ponto4D(-0.3, -0.3,  0.3),
@@ -33,7 +45,7 @@ namespace gcgcg
         new Ponto4D( 0.3,  0.3, -0.3),
         new Ponto4D(-0.3,  0.3, -0.3)
       };
-
+      
       base.PontosAdicionar(vertices[0]);
       base.PontosAdicionar(vertices[1]);
       base.PontosAdicionar(vertices[2]);

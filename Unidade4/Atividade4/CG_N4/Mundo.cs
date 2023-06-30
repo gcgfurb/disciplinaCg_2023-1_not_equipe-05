@@ -12,6 +12,7 @@ using System;
 using OpenTK.Mathematics;
 using System.Collections.Generic;
 
+
 //FIXME: padrão Singleton
 
 namespace gcgcg
@@ -29,6 +30,28 @@ namespace gcgcg
        0.0f,  0.0f, -0.5f, /* Z- */      0.0f,  0.0f,  0.5f  /* Z+ */
     };
 
+    private readonly float[] _vertices = {
+        // Position         Texture coordinates
+        -0.3f, -0.3f,  0.305f, 0.0f, 0.0f,
+         0.3f, -0.3f,  0.305f, 1.0f, 0.0f,
+         0.3f,  0.3f,  0.305f, 1.0f, 1.0f,
+        -0.3f,  0.3f,  0.305f, 0.0f, 1.0f
+      };
+
+    private readonly float[] _vertices2 = {
+      // Position         Texture coordinates
+      -0.3f, -0.3f, -0.3f, 0.0f, 0.0f,
+       0.3f, -0.3f, -0.3f, 1.0f, 0.0f,
+       0.3f,  0.3f, -0.3f, 1.0f, 1.0f,
+      -0.3f,  0.3f, -0.3f, 0.0f, 1.0f
+    };
+
+    private readonly uint[] _indices =
+    {
+        1, 2, 3,
+        0, 1, 3
+    };
+
     private int _vertexBufferObject_sruEixos;
     private int _vertexArrayObject_sruEixos;
 
@@ -39,6 +62,7 @@ namespace gcgcg
     private float yAnterior;
     double anguloY;
 
+    private Shader _shader;
     private Shader _shaderBranca;
     private Shader _shaderVermelha;
     private Shader _shaderVerde;
@@ -46,6 +70,15 @@ namespace gcgcg
     private Shader _shaderCiano;
     private Shader _shaderMagenta;
     private Shader _shaderAmarela;
+    private Texture _texture;
+    private Texture _texture2;
+    private Texture _texture3;
+    private Texture _texture4;
+    private Texture _texture5;
+    private Texture _texture6;
+    private int _vertexBufferObject_texture;
+    private int _vertexArrayObject_texture;
+    private int _elementBufferObject_texture;
 
     private Camera _camera;
 
@@ -101,6 +134,54 @@ namespace gcgcg
       _shaderAmarela = new Shader("Shaders/shader.vert", "Shaders/shaderAmarela.frag");
       #endregion
 
+      #region Texturas
+      // float[]_vertices = {
+      //   -0.3f, -0.3f,  0.3f,
+      //    0.3f, -0.3f,  0.3f,
+      //    0.3f,  0.3f,  0.3f,
+      //   -0.3f,  0.3f,  0.3f,
+      //   -0.3f, -0.3f, -0.3f,
+      //    0.3f, -0.3f, -0.3f,
+      //    0.3f,  0.3f, -0.3f,
+      //   -0.3f,  0.3f, -0.3f
+      // };
+
+
+
+      _vertexArrayObject_texture = GL.GenVertexArray();
+      GL.BindVertexArray(_vertexArrayObject_texture);
+
+      _vertexBufferObject_texture = GL.GenBuffer();
+      GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject_texture);
+      GL.BufferData(BufferTarget.ArrayBuffer, _vertices.Length * sizeof(float), _vertices, BufferUsageHint.StaticDraw);
+
+      _elementBufferObject_texture = GL.GenBuffer();
+      GL.BindBuffer(BufferTarget.ElementArrayBuffer, _elementBufferObject_texture);
+      GL.BufferData(BufferTarget.ElementArrayBuffer, _indices.Length * sizeof(uint), _indices, BufferUsageHint.StaticDraw);
+
+      // The shaders have been modified to include the texture coordinates, check them out after finishing the OnLoad function.
+      _shader = new Shader("Shaders/shader_texture.vert", "Shaders/shader_texture.frag");
+      _shader.Use();
+      // Because there's now 5 floats between the start of the first vertex and the start of the second,
+      // we modify the stride from 3 * sizeof(float) to 5 * sizeof(float).
+      // This will now pass the new vertex array to the buffer.
+      var vertexLocation = _shader.GetAttribLocation("aPosition");
+      GL.EnableVertexAttribArray(vertexLocation);
+      GL.VertexAttribPointer(vertexLocation, 3, VertexAttribPointerType.Float, false, 5 * sizeof(float), 0);
+
+      // Next, we also setup texture coordinates. It works in much the same way.
+      // We add an offset of 3, since the texture coordinates comes after the position data.
+      // We also change the amount of data to 2 because there's only 2 floats for texture coordinates.
+      var texCoordLocation = _shader.GetAttribLocation("aTexCoord");
+      GL.EnableVertexAttribArray(texCoordLocation);
+      GL.VertexAttribPointer(texCoordLocation, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), 3 * sizeof(float));
+
+      _texture = Texture.LoadFromFile("Resources/all.jpg");
+      _texture.Use(TextureUnit.Texture0);
+
+
+      #endregion
+
       #region Eixos: SRU  
       _vertexBufferObject_sruEixos = GL.GenBuffer();
       GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject_sruEixos);
@@ -141,8 +222,15 @@ namespace gcgcg
 
       #region Objeto: Cubo
       objetoSelecionado = new Cubo(mundo, ref rotuloNovo);
-      objetoSelecionado.shaderCor = _shaderCiano;
+      objetoSelecionado.shaderCor = _shader;
       objetoSelecionado.PrimitivaTipo = PrimitiveType.TriangleFan;
+
+      List<Ponto4D> pontosCubo = objetoSelecionado.getListaPontos();
+      
+      for (int i = 0; i < pontosCubo.Count; i++){
+        
+      }
+
       #endregion
 
       _camera = new Camera(Vector3.UnitZ, Size.X / (float)Size.Y);
@@ -159,6 +247,17 @@ namespace gcgcg
       GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
       mundo.Desenhar(new Transformacao4D(), _camera);
+      #region drawImageFront
+      
+      GL.BindVertexArray(_vertexArrayObject_texture);
+
+      _texture.Use(TextureUnit.Texture0);
+      _shader.Use();
+      GL.DrawElements(PrimitiveType.Triangles, _indices.Length, DrawElementsType.UnsignedInt, 0);
+
+      #endregion
+
+      
 
 #if CG_Gizmo      
       Gizmo_Sru3D();
@@ -360,6 +459,7 @@ namespace gcgcg
       _shaderAzul.SetMatrix4("projection", _camera.GetProjectionMatrix());
       _shaderAzul.Use();
       GL.DrawArrays(PrimitiveType.Lines, 4, 2);
+
 #elif CG_DirectX && !CG_OpenGL
       Console.WriteLine(" .. Coloque aqui o seu código em DirectX");
 #elif (CG_DirectX && CG_OpenGL) || (!CG_DirectX && !CG_OpenGL)

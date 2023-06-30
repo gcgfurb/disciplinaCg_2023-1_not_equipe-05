@@ -141,6 +141,11 @@ namespace gcgcg
       return pontosLista[id];
     }
 
+    public List<Ponto4D> getListaPontos()
+    {
+      return pontosLista;
+    }
+
     public void PontosAdicionar(Ponto4D pto)
     {
       pontosLista.Add(pto);
