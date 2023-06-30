@@ -108,6 +108,7 @@ namespace gcgcg
     private int _vertexBufferObject_texture;
     private int _vertexArrayObject_texture;
     private int _elementBufferObject_texture;
+    private List<Ponto4D> verticesCubo;
 
     private Camera _camera;
 
@@ -236,6 +237,12 @@ namespace gcgcg
       objetoSelecionado = new Cubo(mundo, ref rotuloNovo);
       objetoSelecionado.shaderCor = _shader;
       objetoSelecionado.PrimitivaTipo = PrimitiveType.TriangleFan;
+
+      verticesCubo = objetoSelecionado.getListaPontos();
+      // List<Ponto4D> front = front.Add(verticesCubo[0])
+
+      Retangulo front = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(-0.3, -0.3,  0.35), new Ponto4D(-0.3, -0.3,  0.35));
+      front.shaderCor = _shaderCiano;
 
       #endregion
 
