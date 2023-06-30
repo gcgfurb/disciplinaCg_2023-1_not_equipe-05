@@ -32,6 +32,13 @@ namespace gcgcg
     private int _vertexBufferObject_sruEixos;
     private int _vertexArrayObject_sruEixos;
 
+    private float xAtual;
+    private float xAnterior;
+    double anguloX;
+    private float yAtual;
+    private float yAnterior;
+    double anguloY;
+
     private Shader _shaderBranca;
     private Shader _shaderVermelha;
     private Shader _shaderVerde;
@@ -139,6 +146,9 @@ namespace gcgcg
       #endregion
 
       _camera = new Camera(Vector3.UnitZ, Size.X / (float)Size.Y);
+
+      anguloX = -90;
+      anguloY = 0;
 
     }
 
@@ -252,26 +262,30 @@ namespace gcgcg
 
       if (MouseState.IsButtonPressed(MouseButton.Left))
       {
-
         System.Console.WriteLine("MouseState.IsButtonPressed(MouseButton.Left)");
         System.Console.WriteLine("__ Valores do Espaço de Tela");
         System.Console.WriteLine("Vector2 mousePosition: " + MousePosition);
+        // System.Console.WriteLine("X: " + MouseState.X +" | PreviousX: "+ MouseState.PreviousX);
         System.Console.WriteLine("Vector2i windowSize: " + Size);
+
+        xAnterior = MouseState.X;
+        yAnterior = MouseState.Y;
       }
-      if (MouseState.IsButtonReleased(MouseButton.Left))
+      if (MouseState.IsButtonDown(MouseButton.Left))
       {
-        // vai pegar um angulo entre 0 e 270°
-        double anguloX = (MouseState.X - MouseState.PreviousX)*2.7;
-        _camera.AtualizarCamera(anguloX);
-        
-        // Ponto4D a = Matematica.GerarPtosCirculo(angulo, 3.0); 
-        // _camera.Position = new Vector3((float)a.X, 0.0f, (float)a.Z);
-        // _camera.Yaw += -(float)(angulo/10);
-        
-        // _camera.Position += _camera.Front*(0.005f);
-        // _camera.Position += _camera.Right*(0.005f);
-        
-        //tentar usar o IsButtonReleased(MouseButton.Left)
+        xAtual = MouseState.X;
+        yAtual = MouseState.Y;
+        // Anterior < Atual = gira Anti-horário ("pra direita/pra cima")
+        // Anterior > Atual = gira horário ("pra esquerda/pra baixo")
+
+        // vai pegar um angulo entre 0 e 360°
+        // multiplicando por 0.45f = 800/360 (regra de 3)
+        // dividindo isso por 100 pq se n girava o cubo muito rapido
+        float incrementoX = (xAnterior - xAtual)*0.0045f;
+        float incrementoY = (yAnterior - yAtual)*0.0045f;
+        anguloX += incrementoX;
+        anguloY += incrementoY;
+        _camera.AtualizarCamera(anguloX, incrementoX, anguloY, incrementoY);
       }
       if (MouseState.IsButtonDown(MouseButton.Right) && objetoSelecionado != null)
       {

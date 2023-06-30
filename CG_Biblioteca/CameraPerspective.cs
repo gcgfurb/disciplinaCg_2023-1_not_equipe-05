@@ -81,11 +81,13 @@ namespace CG_Biblioteca
             _up = Vector3.Normalize(Vector3.Cross(_right, _front));
         }
 
-        public void AtualizarCamera(double anguloX)
+        public void AtualizarCamera(double anguloX, float incrementoX, double anguloY, float incrementoY)
         {
-            Ponto4D a = Matematica.GerarPtosCirculo(-anguloX, 1.0); 
-            Position = new Vector3((float)a.X, 0.0f, (float)a.Z);
-            Yaw += -(float)(anguloX);
+            Ponto4D ptoX = Matematica.GerarPtosCirculo(-anguloX, 1);
+            Ponto4D ptoY = Matematica.GerarPtosCirculo(-anguloY, 1);
+            Position = new Vector3((float)(ptoX.X), (float)(ptoY.Y), (float)(ptoX.Y));
+            Yaw += -incrementoX;
+            Pitch += incrementoY;
         }
     }
 }
