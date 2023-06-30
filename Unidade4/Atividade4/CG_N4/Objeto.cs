@@ -22,7 +22,7 @@ namespace gcgcg
     private float primitivaTamanho = 1;
     public float PrimitivaTamanho { get => primitivaTamanho; set => primitivaTamanho = value; }
     private Shader _shaderObjeto = new Shader("Shaders/shader.vert", "Shaders/shaderBranca.frag");
-    public Shader shaderCor { set => _shaderObjeto = value; }
+    public Shader shaderCor {get => _shaderObjeto; set => _shaderObjeto = value;}
 
     // Vértices do objeto TODO: o objeto mundo deveria ter estes atributos abaixo?
     protected List<Ponto4D> pontosLista = new List<Ponto4D>();

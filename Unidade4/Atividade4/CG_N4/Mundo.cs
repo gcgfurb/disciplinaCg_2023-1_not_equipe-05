@@ -32,30 +32,30 @@ namespace gcgcg
 
     // private readonly float[] _vertices = {
     //     // Position         Texture coordinates
-    //     -0.3f, -0.3f,  0.3005f, 0.0f, 0.0f,
-    //      0.3f, -0.3f,  0.3005f, 1.0f, 0.0f,
-    //      0.3f,  0.3f,  0.3005f, 1.0f, 1.0f,
-    //     -0.3f,  0.3f,  0.3005f, 0.0f, 1.0f
+    //     -0.3005f, -0.3005f,  0.3005f, 0.0f, 0.0f,
+    //      0.3005f, -0.3005f,  0.3005f, 1.0f, 0.0f,
+    //      0.3005f,  0.3005f,  0.3005f, 1.0f, 1.0f,
+    //     -0.3005f,  0.3005f,  0.3005f, 0.0f, 1.0f
     //   };
 
       private readonly float[] _vertices = {
         // Position         Texture coordinates
-        -0.3f, -0.3f,  0.3005f, 0.0f, 0.0f, // front
-          0.3f, -0.3f,  0.3005f, 1.0f, 0.0f,
-          0.3f,  0.3f,  0.3005f, 1.0f, 1.0f,
-        -0.3f,  0.3f,  0.3005f, 0.0f, 1.0f,
-        -0.3f, -0.3f, -0.3f, 0.0f, 0.0f, // back
-        0.3f, -0.3f, -0.3f, 1.0f, 0.0f,
-        0.3f,  0.3f, -0.3f, 1.0f, 1.0f,
-        -0.3f,  0.3f, -0.3f, 0.0f, 1.0f,
-        -0.3f, 0.3005f,  0.3005f, 0.0f, 0.0f, // top
-        0.3f, 0.3005f,  -0.3005f, 1.0f, 1.0f,
-        0.3f, 0.3005f,  0.3005f, 1.0f, 0.0f,
-        -0.3f, 0.3005f, -0.3f, 0.0f, 1.0f,
-        0.3f, -0.3005f,  -0.3005f, 0.0f, 0.0f, // bottom
-        -0.3f, -0.3005f,  0.3005f, 1.0f, 1.0f,
-        -0.3f, -0.3005f,  -0.3005f, 1.0f, 0.0f,
-        0.3f, -0.3005f, 0.3f, 0.0f, 1.0f,
+        -0.3005f, -0.3005f,  0.3005f, 0.0f, 0.0f, // front
+          0.3005f, -0.3005f,  0.3005f, 1.0f, 0.0f,
+          0.3005f,  0.3005f,  0.3005f, 1.0f, 1.0f,
+        -0.3005f,  0.3005f,  0.3005f, 0.0f, 1.0f,
+        -0.3005f, -0.3005f, -0.3005f, 0.0f, 0.0f, // back
+        0.3005f, -0.3005f, -0.3005f, 1.0f, 0.0f,
+        0.3005f,  0.3005f, -0.3005f, 1.0f, 1.0f,
+        -0.3005f,  0.3005f, -0.3005f, 0.0f, 1.0f,
+        -0.3005f, 0.3005f,  0.3005f, 0.0f, 0.0f, // top
+        0.3005f, 0.3005f,  -0.3005f, 1.0f, 1.0f,
+        0.3005f, 0.3005f,  0.3005f, 1.0f, 0.0f,
+        -0.3005f, 0.3005f, -0.3005f, 0.0f, 1.0f,
+        0.3005f, -0.3005f,  -0.3005f, 0.0f, 0.0f, // bottom
+        -0.3005f, -0.3005f,  0.3005f, 1.0f, 1.0f,
+        -0.3005f, -0.3005f,  -0.3005f, 1.0f, 0.0f,
+        0.3005f, -0.3005f, 0.3005f, 0.0f, 1.0f,
         0.3005f, -0.3005f, -0.3005f, 0.0f, 0.0f, //right
         0.3005f, 0.3005f, 0.3005f, 1.0f, 1.0f,
         0.3005f, -0.3005f, 0.3005f, 1.0f, 0.0f,
@@ -164,17 +164,6 @@ namespace gcgcg
       #endregion
 
       #region Texturas
-      // float[]_vertices = {
-      //   -0.3f, -0.3f,  0.3f,
-      //    0.3f, -0.3f,  0.3f,
-      //    0.3f,  0.3f,  0.3f,
-      //   -0.3f,  0.3f,  0.3f,
-      //   -0.3f, -0.3f, -0.3f,
-      //    0.3f, -0.3f, -0.3f,
-      //    0.3f,  0.3f, -0.3f,
-      //   -0.3f,  0.3f, -0.3f
-      // };
-
 
       GL.Enable(EnableCap.Texture2D);
       _vertexArrayObject_texture = GL.GenVertexArray();
@@ -248,12 +237,6 @@ namespace gcgcg
       objetoSelecionado.shaderCor = _shader;
       objetoSelecionado.PrimitivaTipo = PrimitiveType.TriangleFan;
 
-      List<Ponto4D> pontosCubo = objetoSelecionado.getListaPontos();
-      
-      for (int i = 0; i < pontosCubo.Count; i++){
-        
-      }
-
       #endregion
 
       _camera = new Camera(Vector3.UnitZ, Size.X / (float)Size.Y);
@@ -277,6 +260,7 @@ namespace gcgcg
       _texture.Use(TextureUnit.Texture0);
       _shader.Use();
       GL.DrawElements(PrimitiveType.Triangles, _indices.Length, DrawElementsType.UnsignedInt, 0);
+      GL.DrawElements(PrimitiveType.Points, _indices.Length, DrawElementsType.UnsignedInt, 0);
 
       #endregion
 
@@ -314,9 +298,11 @@ namespace gcgcg
       {
         if (objetoSelecionado == null)
           objetoSelecionado = mundo;
-        objetoSelecionado.shaderCor = _shaderBranca;
+        if (objetoSelecionado.shaderCor != _shader)
+          objetoSelecionado.shaderCor = _shaderBranca;
         objetoSelecionado = mundo.GrafocenaBuscaProximo(objetoSelecionado);
-        objetoSelecionado.shaderCor = _shaderAmarela;
+        if (objetoSelecionado.shaderCor != _shader)
+          objetoSelecionado.shaderCor = _shaderAmarela;
       }
       if (input.IsKeyPressed(Keys.G))
         mundo.GrafocenaImprimir("");
