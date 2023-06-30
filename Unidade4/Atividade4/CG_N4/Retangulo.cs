@@ -9,13 +9,13 @@ namespace gcgcg
   {
     public Retangulo(Objeto paiRef, ref char _rotulo, Ponto4D ptoInfEsq, Ponto4D ptoSupDir) : base(paiRef, ref _rotulo)  
     {
-      PrimitivaTipo = PrimitiveType.Points;
+      PrimitivaTipo = PrimitiveType.TriangleFan;
       PrimitivaTamanho = 10;
 
       base.PontosAdicionar(ptoInfEsq);
-      base.PontosAdicionar(new Ponto4D(ptoSupDir.X, ptoInfEsq.Y));
+      base.PontosAdicionar(new Ponto4D(ptoSupDir.X, ptoInfEsq.Y, ptoSupDir.Z));
       base.PontosAdicionar(ptoSupDir);
-      base.PontosAdicionar(new Ponto4D(ptoInfEsq.X, ptoSupDir.Y));
+      base.PontosAdicionar(new Ponto4D(ptoInfEsq.X, ptoSupDir.Y, ptoInfEsq.Z));
       Atualizar();
     }
 

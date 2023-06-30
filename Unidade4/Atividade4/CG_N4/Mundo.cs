@@ -234,15 +234,26 @@ namespace gcgcg
       #endregion
 
       #region Objeto: Cubo
-      objetoSelecionado = new Cubo(mundo, ref rotuloNovo);
-      objetoSelecionado.shaderCor = _shader;
-      objetoSelecionado.PrimitivaTipo = PrimitiveType.TriangleFan;
+      // objetoSelecionado = new Cubo(mundo, ref rotuloNovo);
+      // objetoSelecionado.shaderCor = _shader;
+      // objetoSelecionado.PrimitivaTipo = PrimitiveType.TriangleFan;
 
-      verticesCubo = objetoSelecionado.getListaPontos();
+      // verticesCubo = objetoSelecionado.getListaPontos();
       // List<Ponto4D> front = front.Add(verticesCubo[0])
 
-      Retangulo front = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(-0.3, -0.3,  0.35), new Ponto4D(-0.3, -0.3,  0.35));
+      Retangulo front = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(-0.3, -0.3, 0.301), new Ponto4D(0.3, 0.3, 0.301));
       front.shaderCor = _shaderCiano;
+      Retangulo back = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(-0.3, -0.3, -0.301), new Ponto4D(0.3, 0.3, -0.301));
+      back.shaderCor = _shaderCiano;
+      Retangulo right = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(0.301, -0.3, -0.3), new Ponto4D(0.301, 0.3, 0.3));
+      right.shaderCor = _shaderCiano;
+      Retangulo left = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(-0.301, -0.3, -0.3), new Ponto4D(-0.301, 0.3, 0.3));
+      left.shaderCor = _shaderCiano;
+      // Retangulo bottom = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(0.3, 0.301, -0.3), new Ponto4D(-0.3, 0.301, 0.3));
+      // bottom.shaderCor = _shaderCiano;
+      // Retangulo up = new Retangulo(objetoSelecionado, ref rotuloNovo, new Ponto4D(-0.3, -0.3, 0.3), new Ponto4D(0.3, 0.3, 0.3));
+      // up.shaderCor = _shaderCiano;
+
 
       #endregion
 
